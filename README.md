@@ -92,22 +92,37 @@ and `/health` requests to the Express API. Stop the containers with
 `docker compose down`. If port 8080 is already in use, set `CAMPORT_PORT` in
 `.env` to a free port before starting the stack.
 
-## Earn credits and cycle passes
+## Marketplace, credits and cycle passes
 
-After the existing Supabase `profiles` and `rent_bookings` tables are set up,
+After applying [`supabase/reset_and_schema.sql`](./supabase/reset_and_schema.sql),
 run [`supabase/earn_credits_and_rentals.sql`](./supabase/earn_credits_and_rentals.sql)
-in the Supabase SQL editor. It creates private report evidence storage, credit
-wallets and ledger entries, reviewer permissions, demo cycle passes, and the
-database functions that approve reports and enforce rental credit/plan limits.
+in the Supabase SQL editor. The reset script is destructive; back up data before
+running it. The earn migration creates private report evidence storage, credit
+wallets and ledger entries, reviewer permissions, the cycle catalog and plans,
+and database functions for food orders, report review, and cycle rentals.
+The frontend reads menu items from active `food_stores` and `food_products`;
+add those records through Supabase before food listings appear. Food order
+totals are calculated from the current product price by the database.
+Cycle owners can use the renter dashboard to upload a cycle photo, model,
+gearing type, description, hourly rate, and pickup location. Available listings
+are shown in Services and are locked when booked.
+
+The cycle catalog and default pass plans are seeded by the SQL scripts. Update
+`cycle_service_catalog` and `cycle_subscription_plans` in Supabase to change
+their names, prices, limits, duration, or availability; the frontend reads those
+values rather than defining them locally.
 
 To authorize a reviewer, an administrator inserts their authenticated user ID
 into `public.garbage_report_reviewers`; the migration includes the SQL template.
-Reports require a photo, GPS location, and description, and earn 2 credits only
-after reviewer approval. Credits are worth ₹1 for rentals, which cost 40
-credits/hour outside included pass time.
+Reports require a photo, GPS location, and description, and earn credits only
+after reviewer approval. Cycle rental pricing and the credit conversion are
+configured in `cycle_service_catalog`.
 
-The ₹199 Starter and ₹299 Plus passes last three months and have daily limits
-of 2 rentals/2 hours and 4 rentals/4 hours respectively. Pass activation is
-demo-only and does not charge users; real subscription checkout is not
-connected. Cycle requests are saved, but there is no live rental partner or
-fleet fulfillment integration yet.
+Pass details and allowances are configured in `cycle_subscription_plans`.
+Pass activation is demo-only and does not charge users; real subscription
+checkout is not connected. Cycle listings and requests are saved, but in-app
+owner/customer messaging and fulfillment tracking are not connected yet.
+
+For Vercel, the browser app uses `VITE_SUPABASE_URL` and
+`VITE_SUPABASE_ANON_KEY`. The anon key is public and protected by RLS; never
+use a Supabase service-role key in a `VITE_` variable or browser code.

@@ -104,7 +104,7 @@ const Login: React.FC = () => {
                <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">Get moving, get a bite</span>
             </div>
             <h1 className="text-6xl font-black tracking-tighter text-white mb-2 italic">camport</h1>
-            <p className="text-on-surface-variant font-bold text-xs uppercase tracking-widest opacity-60">Local rides. Good food. One tap.</p>
+            <p className="text-on-surface-variant font-bold text-xs uppercase tracking-widest opacity-60">Cycle rentals. Good food. One tap.</p>
           </div>
 
           <div className="relative group">

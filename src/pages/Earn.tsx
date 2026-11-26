@@ -162,7 +162,7 @@ const Earn: React.FC = () => {
             <Bike size={18} />
           </span>
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-extrabold">Cycle pass · {dashboard.subscription.plan_code === 'starter' ? 'Starter' : 'Plus'}</p>
+            <p className="text-sm font-extrabold">Cycle pass · {dashboard.subscription.plan_code}</p>
             <p className="mt-1 text-[10px] text-on-surface-variant">
               Demo access until {new Date(dashboard.subscription.ends_at).toLocaleDateString()}
             </p>

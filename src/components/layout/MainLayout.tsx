@@ -11,7 +11,7 @@ const MainLayout: React.FC = () => {
   const isStoryView = location.pathname.includes('/story/');
   const isGigDetails = location.pathname.includes('/gig/') && !location.pathname.includes('/view/');
   const isMessageView = location.pathname.startsWith('/messages');
-  const isPrimaryScreen = ['/', '/orders', '/profile', '/services', '/explore', '/earn'].includes(location.pathname);
+  const isPrimaryScreen = ['/', '/orders', '/profile', '/services', '/explore', '/earn', '/renter'].includes(location.pathname);
 
   const hideNavbar = isPrimaryScreen || isImmersiveView || isStoryView || isMessageView;
   const hideBottomNav = isImmersiveView || isStoryView || isGigDetails || isMessageView;

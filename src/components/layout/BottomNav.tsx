@@ -20,7 +20,7 @@ const BottomNav: React.FC = () => {
       <div className="mx-auto flex h-[68px] max-w-md items-center justify-between px-5 lg:h-full lg:max-w-none lg:flex-col lg:items-stretch lg:justify-start lg:px-0">
         <div className="mb-9 hidden px-4 lg:block">
           <p className="text-xl font-black tracking-tight text-white">camport</p>
-          <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/40">Rides · food · rentals</p>
+          <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/40">Food · cycle rentals</p>
         </div>
         <div className="flex w-full items-center justify-between lg:flex-col lg:items-stretch lg:gap-2">
         {tabs.map((tab) => {
@@ -50,7 +50,7 @@ const BottomNav: React.FC = () => {
         })}
         </div>
         <p className="mt-auto hidden px-4 pb-2 text-[11px] leading-5 text-white/35 lg:block">
-          Local rides and neighborhood favorites, all in one place.
+          Cycle rentals and neighborhood favorites, all in one place.
         </p>
       </div>
     </nav>

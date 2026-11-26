@@ -63,7 +63,7 @@ const Navbar: React.FC = () => {
 
         {/* Right Section: Actions */}
         <div className="flex items-center gap-4">
-          <button onClick={() => navigate('/services?type=ride')} aria-label="Find a ride" className="p-2 text-on-surface-variant hover:text-white transition-colors">
+          <button onClick={() => navigate('/services')} aria-label="Browse services" className="p-2 text-on-surface-variant hover:text-white transition-colors">
             <Search size={20} />
           </button>
           

@@ -38,6 +38,15 @@ export interface CycleSubscription {
   ends_at: string;
 }
 
+export interface CycleSubscriptionPlan {
+  plan_code: 'starter' | 'plus';
+  name: string;
+  price_inr: number;
+  duration_months: number;
+  daily_rental_limit: number;
+  daily_hours_limit: number;
+}
+
 export interface EarnDashboard {
   balance: number;
   transactions: CreditTransaction[];
@@ -123,6 +132,17 @@ export const earnService = {
     return data as CycleSubscription | null;
   },
 
+  async getCycleSubscriptionPlans(): Promise<CycleSubscriptionPlan[]> {
+    const { data, error } = await supabase
+      .from('cycle_subscription_plans')
+      .select('plan_code, name, price_inr, duration_months, daily_rental_limit, daily_hours_limit')
+      .eq('is_active', true)
+      .order('price_inr');
+
+    throwIfError(error);
+    return (data ?? []) as CycleSubscriptionPlan[];
+  },
+
   async submitReport(userId: string, submission: ReportSubmission): Promise<void> {
     const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
     const maxSizeBytes = 10 * 1024 * 1024;
@@ -196,9 +216,9 @@ export const earnService = {
     throwIfError(error);
   },
 
-  async bookCycleRental(pickupLocation: string, rentalHours: number): Promise<CycleRentalResult> {
+  async bookCycleRental(listingId: string, rentalHours: number): Promise<CycleRentalResult> {
     const { data, error } = await supabase.rpc('create_cycle_rental', {
-      p_pickup_location: pickupLocation,
+      p_listing_id: listingId,
       p_rental_hours: rentalHours,
     });
     throwIfError(error);
@@ -208,22 +228,21 @@ export const earnService = {
   async getCycleRentalBookings(userId: string): Promise<Booking[]> {
     const { data, error } = await supabase
       .from('rent_bookings')
-      .select('id, pickup_location, rental_hours, estimated_total, credits_charged, billing_source, created_at')
+      .select('id, cycle_listing_id, cycle_model, pickup_location, rental_hours, estimated_total, credits_charged, billing_source, status, created_at')
       .eq('customer_id', userId)
       .order('created_at', { ascending: false });
     throwIfError(error);
 
     return (data ?? []).map((rental) => ({
       id: rental.id,
-      serviceId: 'cycle-rental',
-      serviceName: 'Cycle rental',
+      serviceId: rental.cycle_listing_id ?? rental.id,
+      serviceName: rental.cycle_model ?? 'Cycle rental',
       type: 'rent',
       amount: Number(rental.estimated_total),
       quantity: rental.rental_hours,
       pickup: rental.pickup_location,
-      destination: '',
       fulfillment: 'rental',
-      status: 'Requested',
+      status: rental.status.replaceAll('_', ' '),
       createdAt: rental.created_at,
       billingSource: rental.billing_source as 'credits' | 'subscription',
       creditsCharged: rental.credits_charged,

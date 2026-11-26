@@ -2,30 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { Bike, Check, Clock3 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-import { earnService, type CycleSubscription } from '../../features/earn/earnService';
+import {
+  earnService,
+  type CycleSubscription,
+  type CycleSubscriptionPlan,
+} from '../../features/earn/earnService';
 import { useUserStore } from '../../store/useUserStore';
-
-const plans = [
-  {
-    code: 'starter' as const,
-    name: 'Starter',
-    price: 199,
-    rentals: 'Up to 2 rentals per day',
-    hours: '2 rental hours per day',
-  },
-  {
-    code: 'plus' as const,
-    name: 'Plus',
-    price: 299,
-    rentals: 'Up to 4 rentals per day',
-    hours: '4 rental hours per day',
-  },
-];
 
 const CycleSubscriptionPanel: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useUserStore();
   const [subscription, setSubscription] = useState<CycleSubscription | null>(null);
+  const [plans, setPlans] = useState<CycleSubscriptionPlan[]>([]);
   const [isLoading, setIsLoading] = useState(Boolean(user));
   const [activatingPlan, setActivatingPlan] = useState<'starter' | 'plus' | null>(null);
   const [error, setError] = useState('');
@@ -39,10 +27,14 @@ const CycleSubscriptionPanel: React.FC = () => {
     }
 
     setIsLoading(true);
-    earnService.getActiveSubscription(user.id)
-      .then((result) => {
+    Promise.all([
+      earnService.getActiveSubscription(user.id),
+      earnService.getCycleSubscriptionPlans(),
+    ])
+      .then(([activeSubscription, availablePlans]) => {
         if (active) {
-          setSubscription(result);
+          setSubscription(activeSubscription);
+          setPlans(availablePlans);
           setError('');
         }
       })
@@ -59,7 +51,7 @@ const CycleSubscriptionPanel: React.FC = () => {
     };
   }, [user]);
 
-  const activatePlan = async (planCode: 'starter' | 'plus') => {
+  const activatePlan = async (planCode: CycleSubscriptionPlan['plan_code']) => {
     setActivatingPlan(planCode);
     setError('');
     try {
@@ -92,7 +84,7 @@ const CycleSubscriptionPanel: React.FC = () => {
         <div>
           <h2 className="text-base font-black">Cycle subscription</h2>
           <p className="mt-1 text-[10px] leading-4 text-on-surface-variant">
-            Three-month demo passes include daily rental time. No real payment is processed.
+            Cycle pass options and allowances are managed in your account.
           </p>
         </div>
       </div>
@@ -114,7 +106,10 @@ const CycleSubscriptionPanel: React.FC = () => {
             <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="text-[9px] font-black uppercase tracking-[0.18em] text-success">Active demo pass</p>
-                <p className="mt-1 text-lg font-black">{subscription.plan_code === 'starter' ? 'Starter' : 'Plus'} · ₹{subscription.price_inr}</p>
+                <p className="mt-1 text-lg font-black">
+                  {plans.find((plan) => plan.plan_code === subscription.plan_code)?.name ?? subscription.plan_code}
+                  {' · '}₹{subscription.price_inr}
+                </p>
               </div>
               <Check size={19} className="text-success" />
             </div>
@@ -122,31 +117,37 @@ const CycleSubscriptionPanel: React.FC = () => {
               <Clock3 size={12} /> Expires {new Date(subscription.ends_at).toLocaleDateString()}
             </p>
           </div>
-        ) : (
+        ) : plans.length ? (
           <div className="grid gap-3 sm:grid-cols-2">
             {plans.map((plan) => (
-              <article key={plan.code} className="rounded-2xl border border-white/10 bg-white/[0.025] p-4">
+            <article key={plan.plan_code} className="rounded-2xl border border-white/10 bg-white/[0.025] p-4">
                 <div className="flex items-baseline justify-between gap-3">
-                  <h3 className="text-sm font-black">{plan.name}</h3>
-                  <p className="text-xl font-black text-primary">₹{plan.price}<span className="ml-1 text-[9px] font-semibold text-on-surface-variant">/ 3 months</span></p>
+                <h3 className="text-sm font-black">{plan.name}</h3>
+                <p className="text-xl font-black text-primary">₹{plan.price_inr}<span className="ml-1 text-[9px] font-semibold text-on-surface-variant">/ {plan.duration_months} months</span></p>
                 </div>
-                <p className="mt-3 text-[10px] font-semibold text-on-surface-variant">{plan.rentals}</p>
-                <p className="mt-1 text-[10px] font-semibold text-on-surface-variant">{plan.hours}</p>
+              <p className="mt-3 text-[10px] font-semibold text-on-surface-variant">
+                Up to {plan.daily_rental_limit} rentals per day
+              </p>
+              <p className="mt-1 text-[10px] font-semibold text-on-surface-variant">
+                {plan.daily_hours_limit} rental hours per day
+              </p>
                 <button
                   type="button"
                   disabled={!user || activatingPlan !== null}
-                  onClick={() => void activatePlan(plan.code)}
+                onClick={() => void activatePlan(plan.plan_code)}
                   className="mt-4 h-10 w-full rounded-full bg-primary text-xs font-black text-[#191715] disabled:opacity-50"
                 >
-                  {activatingPlan === plan.code ? 'Activating…' : `Try ${plan.name} demo`}
+                {activatingPlan === plan.plan_code ? 'Activating…' : `Try ${plan.name} demo`}
                 </button>
               </article>
             ))}
           </div>
+        ) : (
+          <p className="text-xs text-on-surface-variant">No cycle plans are currently available.</p>
         )}
 
         <p className="mt-4 text-[9px] leading-4 text-on-surface-variant">
-          Rentals beyond the included daily pass allowance cost 40 credits per hour. Credits cannot be used to buy subscriptions.
+          Rentals beyond your included daily pass allowance use credits at the current cycle rental rate. Demo activation does not process a payment.
         </p>
       </div>
     </section>

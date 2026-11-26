@@ -1,73 +1,64 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { ArrowRight, Bike, CarFront, Clock3, PackageCheck, Sandwich } from 'lucide-react';
+import { ArrowRight, Bike, Clock3, PackageCheck, Sandwich } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import RouteMapPreview from '../components/common/RouteMapPreview';
 import type { Booking, ServiceType } from '../types/booking';
-import { getBookings } from '../utils/bookings';
 import { earnService } from '../features/earn/earnService';
+import { marketplaceService } from '../features/marketplace/marketplaceService';
 import { useUserStore } from '../store/useUserStore';
 
-const serviceShortcuts: { label: string; type: ServiceType; icon: typeof CarFront }[] = [
-  { label: 'Book a ride', type: 'ride', icon: CarFront },
+const serviceShortcuts: { label: string; type: ServiceType; icon: typeof Bike }[] = [
   { label: 'Rent a cycle', type: 'rent', icon: Bike },
   { label: 'Order food', type: 'snack', icon: Sandwich },
 ];
 
-const getBookingDestination = (booking: Booking | undefined) => {
-  if (!booking) return 'Choose a destination';
-  if (booking.type === 'ride') return booking.destination || 'Choose a destination';
-  if (booking.type === 'rent') return 'Cycle pickup';
-  return booking.fulfillment === 'delivery' ? 'Local store' : 'Pickup counter';
-};
-
 const getBookingSubtitle = (booking: Booking) => {
-  if (booking.type === 'ride') return `${booking.pickup || 'Pickup point'} → ${booking.destination || 'Destination'}`;
-  if (booking.type === 'rent') return `${booking.quantity} ${booking.quantity === 1 ? 'hour' : 'hours'} · ${booking.pickup}`;
+  if (booking.type === 'rent') {
+    return `${booking.quantity} ${booking.quantity === 1 ? 'hour' : 'hours'} · ${booking.pickup}`;
+  }
   return `${booking.fulfillment === 'delivery' ? 'Delivery' : 'Store pickup'} · ${booking.pickup}`;
 };
 
 const getBookingIcon = (booking: Booking) => {
-  if (booking.type === 'ride') return CarFront;
   if (booking.type === 'rent') return Bike;
   return booking.fulfillment === 'delivery' ? PackageCheck : Sandwich;
 };
 
 const Orders: React.FC = () => {
-  const [{ localBookings, loadError }] = useState(() => {
-    try {
-      return { localBookings: getBookings(), loadError: '' };
-    } catch (error) {
-      console.error('Unable to load saved bookings:', error);
-      return { localBookings: [] as Booking[], loadError: 'Could not load saved requests from this device.' };
-    }
-  });
   const { user } = useUserStore();
-  const [cycleBookings, setCycleBookings] = useState<Booking[]>([]);
-  const [cycleLoadError, setCycleLoadError] = useState('');
-  const [isLoadingCycleBookings, setIsLoadingCycleBookings] = useState(Boolean(user));
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [loadError, setLoadError] = useState('');
+  const [isLoading, setIsLoading] = useState(Boolean(user));
+  const navigate = useNavigate();
 
   useEffect(() => {
     let active = true;
     if (!user) {
-      setCycleBookings([]);
-      setIsLoadingCycleBookings(false);
+      setBookings([]);
+      setIsLoading(false);
       return;
     }
 
-    setIsLoadingCycleBookings(true);
-    earnService.getCycleRentalBookings(user.id)
-      .then((rentals) => {
+    setIsLoading(true);
+    Promise.all([
+      earnService.getCycleRentalBookings(user.id),
+      marketplaceService.getFoodOrderBookings(user.id),
+    ])
+      .then(([rentals, foodOrders]) => {
         if (active) {
-          setCycleBookings(rentals);
-          setCycleLoadError('');
+          setBookings([...rentals, ...foodOrders].sort(
+            (left, right) => Date.parse(right.createdAt) - Date.parse(left.createdAt),
+          ));
+          setLoadError('');
         }
       })
       .catch((error: unknown) => {
-        console.error('Unable to load cycle rental activity:', error);
-        if (active) setCycleLoadError(error instanceof Error ? error.message : 'Could not load cycle rentals.');
+        console.error('Unable to load marketplace activity:', error);
+        if (active) {
+          setLoadError(error instanceof Error ? error.message : 'Could not load your activity.');
+        }
       })
       .finally(() => {
-        if (active) setIsLoadingCycleBookings(false);
+        if (active) setIsLoading(false);
       });
 
     return () => {
@@ -75,12 +66,7 @@ const Orders: React.FC = () => {
     };
   }, [user]);
 
-  const navigate = useNavigate();
-  const bookings = useMemo(
-    () => [...cycleBookings, ...localBookings].sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt)),
-    [cycleBookings, localBookings],
-  );
-  const latestBooking = bookings[0];
+  const latestBooking = useMemo(() => bookings[0], [bookings]);
 
   return (
     <div className="mx-auto min-h-screen max-w-md bg-background px-5 pb-28 pt-5 text-on-surface lg:max-w-7xl lg:px-8 lg:pb-12 lg:pt-8">
@@ -88,7 +74,7 @@ const Orders: React.FC = () => {
         <div>
           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Your Camport</p>
           <h1 className="mt-1 text-3xl font-black tracking-tight lg:text-4xl">Activity</h1>
-          <p className="mt-1 text-xs text-on-surface-variant lg:text-sm">Track requests and revisit your recent orders.</p>
+          <p className="mt-1 text-xs text-on-surface-variant lg:text-sm">Your Supabase-backed rental and food orders.</p>
         </div>
         <button
           type="button"
@@ -100,69 +86,53 @@ const Orders: React.FC = () => {
         </button>
       </header>
 
+      {loadError && (
+        <div role="alert" className="mb-4 rounded-2xl border border-error/20 bg-error/10 px-4 py-3 text-xs text-error">
+          {loadError}
+        </div>
+      )}
+
       <div className="grid gap-7 lg:grid-cols-[minmax(0,1.1fr)_minmax(300px,0.9fr)]">
         <div className="space-y-7">
-          <section className="ios-card overflow-hidden">
-            <RouteMapPreview
-              pickup={latestBooking?.pickup || 'Your pickup point'}
-              destination={getBookingDestination(latestBooking)}
-              pickupCoords={latestBooking?.pickupCoords ?? null}
-              destinationCoords={latestBooking?.destinationCoords ?? null}
-              travelMode={latestBooking?.type === 'rent' ? 'BICYCLING' : 'DRIVING'}
-              className="h-52 rounded-none lg:h-64"
-            />
-            <div className="p-5">
-              <div className="flex items-center justify-between gap-3">
-                <p className="text-[9px] font-black uppercase tracking-[0.2em] text-on-surface-variant">
-                  {latestBooking ? 'Latest request' : 'Ready when you are'}
-                </p>
-                {latestBooking && (
-                  <span className="rounded-full bg-primary/12 px-2.5 py-1 text-[10px] font-extrabold text-primary">
-                    Request sent
-                  </span>
-                )}
+          <section className="ios-card p-5">
+            <p className="text-[9px] font-black uppercase tracking-[0.2em] text-on-surface-variant">
+              {latestBooking ? 'Latest request' : 'Ready when you are'}
+            </p>
+            <h2 className="mt-2 text-lg font-black text-on-surface">
+              {latestBooking?.serviceName ?? 'Explore current services'}
+            </h2>
+            <p className="mt-1 text-xs text-on-surface-variant">
+              {latestBooking
+                ? getBookingSubtitle(latestBooking)
+                : 'Cycle rentals and food listings are loaded from Supabase.'}
+            </p>
+            {latestBooking && (
+              <div className="mt-3 flex items-center justify-between gap-3">
+                <span className="text-[10px] font-bold text-on-surface-variant">
+                  {new Date(latestBooking.createdAt).toLocaleString()}
+                </span>
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold capitalize text-primary">
+                  <Clock3 size={11} /> {latestBooking.status}
+                </span>
               </div>
-              <h2 className="mt-2 text-lg font-black text-on-surface">
-                {latestBooking ? latestBooking.serviceName : 'Your next trip starts here'}
-              </h2>
-              <p className="mt-1 text-xs text-on-surface-variant">
-                {latestBooking ? getBookingSubtitle(latestBooking) : 'Book a local ride, rent a cycle, or order something nearby.'}
-              </p>
-              {latestBooking && (latestBooking.distanceText || latestBooking.durationText) && (
-                <p className="mt-1.5 text-[11px] font-bold text-primary">
-                  {[latestBooking.distanceText, latestBooking.durationText].filter(Boolean).join(' · ')}
-                </p>
-              )}
-
-              {latestBooking ? (
-                <div className="mt-5">
-                  <div className="h-1.5 overflow-hidden rounded-full bg-surface-container">
-                    <div className="h-full w-1/4 rounded-full bg-primary" />
-                  </div>
-                  <p className="mt-2 text-[10px] leading-4 text-on-surface-variant">
-                    {latestBooking.billingSource
-                      ? 'Cycle request saved to your account. Partner fulfillment is not connected yet.'
-                      : 'Saved on this device. Live partner tracking is not connected yet.'}
-                  </p>
-                </div>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => navigate('/services')}
-                  className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-xs font-extrabold text-[#191715]"
-                >
-                  Explore services <ArrowRight size={14} />
-                </button>
-              )}
-            </div>
+            )}
+            {!latestBooking && !isLoading && (
+              <button
+                type="button"
+                onClick={() => navigate('/services')}
+                className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-xs font-extrabold text-[#191715]"
+              >
+                Explore services <ArrowRight size={14} />
+              </button>
+            )}
           </section>
 
           <section>
             <div className="mb-3">
               <h2 className="text-base font-black">Services</h2>
-              <p className="mt-0.5 text-[11px] text-on-surface-variant">Get moving or order again</p>
+              <p className="mt-0.5 text-[11px] text-on-surface-variant">Browse the live catalog</p>
             </div>
-            <div className="grid grid-cols-3 gap-2.5">
+            <div className="grid grid-cols-2 gap-2.5">
               {serviceShortcuts.map(({ label, type, icon: Icon }) => (
                 <button
                   type="button"
@@ -184,19 +154,25 @@ const Orders: React.FC = () => {
           <div className="mb-3 flex items-end justify-between">
             <div>
               <h2 className="text-base font-black">Recent activity</h2>
-              <p className="mt-0.5 text-[11px] text-on-surface-variant">Your requests on this device</p>
+              <p className="mt-0.5 text-[11px] text-on-surface-variant">Requests saved to your account</p>
             </div>
             {bookings.length > 0 && <span className="text-[10px] font-bold text-on-surface-variant">{bookings.length} total</span>}
           </div>
 
-          {(loadError || cycleLoadError) && (
-          <div role="alert" className="mb-3 rounded-2xl border border-error/20 bg-error/10 px-4 py-3 text-xs text-error">
-            {loadError || cycleLoadError}
-          </div>
-          )}
-          {isLoadingCycleBookings && bookings.length === 0 ? (
-          <div className="ios-card p-5 text-xs text-on-surface-variant">Loading activity…</div>
-          ) : bookings.length > 0 ? (
+          {isLoading ? (
+            <div className="ios-card p-5 text-xs text-on-surface-variant">Loading activity…</div>
+          ) : !user ? (
+            <div className="ios-card p-5">
+              <p className="text-sm font-extrabold text-on-surface">Sign in to view your activity</p>
+              <button
+                type="button"
+                onClick={() => navigate('/login')}
+                className="mt-4 inline-flex items-center gap-2 text-xs font-extrabold text-primary"
+              >
+                Sign in <ArrowRight size={14} />
+              </button>
+            </div>
+          ) : bookings.length ? (
             <div className="space-y-3">
               {bookings.map((booking) => {
                 const Icon = getBookingIcon(booking);
@@ -220,7 +196,7 @@ const Orders: React.FC = () => {
                             ? `${booking.creditsCharged} credits`
                             : `₹${booking.amount}`}
                       </p>
-                      <p className="mt-1 inline-flex items-center gap-1 text-[9px] font-bold text-primary">
+                      <p className="mt-1 inline-flex items-center gap-1 text-[9px] font-bold capitalize text-primary">
                         <Clock3 size={10} /> {booking.status}
                       </p>
                     </div>
@@ -231,7 +207,7 @@ const Orders: React.FC = () => {
           ) : (
             <div className="ios-card p-5">
               <p className="text-sm font-extrabold text-on-surface">No requests yet</p>
-              <p className="mt-1 text-xs leading-5 text-on-surface-variant">Your rides, rentals and food orders will show up here.</p>
+              <p className="mt-1 text-xs leading-5 text-on-surface-variant">Your cycle rentals and food orders will show up here.</p>
               <button
                 type="button"
                 onClick={() => navigate('/services')}

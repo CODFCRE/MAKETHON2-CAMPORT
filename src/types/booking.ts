@@ -1,23 +1,34 @@
-export type ServiceType = 'ride' | 'snack' | 'rent';
+export type ServiceType = 'snack' | 'rent';
 
-export interface MarketplaceService {
+interface MarketplaceServiceBase {
   id: string;
-  type: ServiceType;
+  storeName?: string;
   name: string;
   description: string;
   category: string;
   price: number;
   priceUnit: string;
-  rating: number;
+  rating: number | null;
   eta: string;
-  image: string;
-  badge?: string;
+  image: string | null;
+  badge?: string | null;
 }
 
-export interface LatLngPoint {
-  lat: number;
-  lng: number;
-}
+export type MarketplaceService =
+  | (MarketplaceServiceBase & {
+      type: 'rent';
+      listingId: string;
+      pickupLocation: string;
+      maxRentalHours: number;
+      creditsPerRupee: number;
+    })
+  | (MarketplaceServiceBase & {
+      type: 'snack';
+      productId: string;
+      storeId: string;
+      storeName: string;
+      maxOrderQuantity: number;
+    });
 
 export interface Booking {
   id: string;
@@ -27,13 +38,8 @@ export interface Booking {
   amount: number;
   quantity: number;
   pickup: string;
-  destination: string;
-  pickupCoords?: LatLngPoint;
-  destinationCoords?: LatLngPoint;
-  distanceText?: string;
-  durationText?: string;
-  fulfillment: 'ride' | 'delivery' | 'pickup' | 'rental';
-  status: 'Requested';
+  fulfillment: 'delivery' | 'pickup' | 'rental';
+  status: string;
   createdAt: string;
   billingSource?: 'credits' | 'subscription';
   creditsCharged?: number;
