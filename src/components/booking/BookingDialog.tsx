@@ -293,7 +293,9 @@ const BookingDialog: React.FC<BookingDialogProps> = ({
 
           <div className="flex items-center justify-between border-t border-white/5 pt-4">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Estimated total</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
+                {isRental ? 'Pay-as-you-go cost' : 'Estimated total'}
+              </p>
               <p className="text-2xl font-black text-white">{isRental ? `${40 * quantity} credits` : `₹${service.price * quantity}`}</p>
             </div>
             <button type="submit" disabled={isSubmitting} className="rounded-full bg-primary px-6 py-3.5 text-sm font-black text-white shadow-lg shadow-primary/20 active:scale-95 disabled:opacity-50">

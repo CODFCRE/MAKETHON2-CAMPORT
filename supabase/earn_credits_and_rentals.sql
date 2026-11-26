@@ -70,19 +70,27 @@ create table if not exists public.credit_transactions (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references public.profiles(id) on delete cascade,
   amount integer not null check (amount <> 0),
-  reason text not null check (reason in ('garbage_report_approved', 'cycle_rental')),
+  reason text not null check (reason in ('garbage_report_approved', 'cycle_rental', 'cycle_rental_refund')),
   report_id uuid unique references public.garbage_reports(id) on delete restrict,
-  rent_booking_id uuid unique references public.rent_bookings(id) on delete restrict,
+  rent_booking_id uuid references public.rent_bookings(id) on delete restrict,
   description text not null,
   created_at timestamptz not null default now(),
   check (
     (reason = 'garbage_report_approved' and amount > 0 and report_id is not null and rent_booking_id is null)
-    or (reason = 'cycle_rental' and amount < 0 and rent_booking_id is not null and report_id is null)
+    or (
+      reason in ('cycle_rental', 'cycle_rental_refund')
+      and ((reason = 'cycle_rental' and amount < 0) or (reason = 'cycle_rental_refund' and amount > 0))
+      and rent_booking_id is not null
+      and report_id is null
+    )
   )
 );
 
 create index if not exists credit_transactions_user_created_idx
   on public.credit_transactions (user_id, created_at desc);
+create unique index if not exists credit_transactions_rental_reason_unique
+  on public.credit_transactions (rent_booking_id, reason)
+  where rent_booking_id is not null;
 
 create or replace function public.ensure_credit_wallet()
 returns trigger
@@ -175,6 +183,50 @@ revoke insert, update, delete on public.credit_wallets, public.credit_transactio
 revoke insert, update, delete on public.cycle_subscriptions from anon, authenticated;
 revoke all on public.rent_bookings from authenticated;
 grant select on public.rent_bookings to authenticated;
+grant update (rental_partner_id, status) on public.rent_bookings to authenticated;
+
+create or replace function public.refund_credits_for_cancelled_rental()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  if old.status not in ('pending', 'accepted', 'ready_for_pickup')
+    or new.status <> 'cancelled'
+    or old.credits_charged = 0 then
+    return new;
+  end if;
+
+  update public.credit_wallets
+  set balance = balance + old.credits_charged,
+      updated_at = pg_catalog.now()
+  where user_id = old.customer_id;
+
+  if not found then
+    raise exception 'Credit wallet was not found for cancelled rental';
+  end if;
+
+  insert into public.credit_transactions (
+    user_id, amount, reason, rent_booking_id, description
+  )
+  values (
+    old.customer_id,
+    old.credits_charged,
+    'cycle_rental_refund',
+    old.id,
+    'Cycle rental cancelled; credits refunded'
+  );
+  return new;
+end;
+$$;
+
+drop trigger if exists rent_bookings_refund_credits_on_cancel on public.rent_bookings;
+create trigger rent_bookings_refund_credits_on_cancel
+after update of status on public.rent_bookings
+for each row
+when (old.status is distinct from new.status)
+execute function public.refund_credits_for_cancelled_rental();
 
 create or replace function public.review_garbage_report(
   p_report_id uuid,

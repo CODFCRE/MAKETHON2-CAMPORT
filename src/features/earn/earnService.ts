@@ -25,7 +25,7 @@ export interface GarbageReport {
 export interface CreditTransaction {
   id: string;
   amount: number;
-  reason: 'garbage_report_approved' | 'cycle_rental';
+  reason: 'garbage_report_approved' | 'cycle_rental' | 'cycle_rental_refund';
   description: string;
   created_at: string;
 }

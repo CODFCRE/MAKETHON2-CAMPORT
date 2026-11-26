@@ -34,7 +34,7 @@ const BottomNav: React.FC = () => {
               key={tab.label}
               onClick={() => navigate(tab.path)}
               className={cn(
-                "relative flex min-w-16 flex-col items-center justify-center gap-1.5 transition-all duration-300 lg:w-full lg:min-w-0 lg:flex-row lg:justify-start lg:gap-3 lg:rounded-2xl lg:px-4 lg:py-3",
+                "relative flex min-w-0 flex-1 flex-col items-center justify-center gap-1.5 transition-all duration-300 lg:w-full lg:flex-none lg:flex-row lg:justify-start lg:gap-3 lg:rounded-2xl lg:px-4 lg:py-3",
                 isActive ? "text-primary lg:bg-primary/10" : "text-on-surface-variant hover:text-white lg:hover:bg-white/5"
               )}
             >

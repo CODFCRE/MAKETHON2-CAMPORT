@@ -64,8 +64,15 @@ const CycleSubscriptionPanel: React.FC = () => {
     setError('');
     try {
       await earnService.activateDemoSubscription(planCode);
-      if (user) setSubscription(await earnService.getActiveSubscription(user.id));
       toast.success('Demo cycle pass activated. No payment was taken.');
+      if (user) {
+        try {
+          setSubscription(await earnService.getActiveSubscription(user.id));
+        } catch (refreshError) {
+          console.error('Demo pass activated, but profile could not refresh:', refreshError);
+          setError('Demo pass activated, but its status could not be refreshed. Reload the page.');
+        }
+      }
     } catch (activationError) {
       console.error('Unable to activate demo cycle plan:', activationError);
       const message = activationError instanceof Error ? activationError.message : 'Could not activate this demo plan.';
