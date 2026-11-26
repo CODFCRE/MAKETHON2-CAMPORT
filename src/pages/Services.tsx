@@ -93,7 +93,7 @@ const Services: React.FC = () => {
         <div>
           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Camport</p>
           <h1 className="mt-1 text-3xl font-black tracking-tight text-white lg:text-4xl">Services</h1>
-          <p className="mt-1 text-xs text-on-surface-variant lg:text-sm">Browse the current Supabase catalog.</p>
+          <p className="mt-1 text-xs text-on-surface-variant lg:text-sm">Browse available rentals and snacks.</p>
         </div>
         <button
           type="button"
@@ -185,7 +185,7 @@ const Services: React.FC = () => {
         <div className="ios-card px-6 py-12 text-center">
           <p className="font-bold text-white">{error ? 'Services could not be loaded' : 'No services available'}</p>
           <p className="mt-2 text-sm text-on-surface-variant">
-            {error ? 'Check your Supabase configuration and try again.' : 'The catalog is empty or your search has no matches.'}
+            {error ? 'We could not load services. Please try again later.' : 'The catalog is empty or your search has no matches.'}
           </p>
         </div>
       )}

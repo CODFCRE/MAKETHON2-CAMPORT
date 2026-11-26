@@ -74,7 +74,7 @@ const Orders: React.FC = () => {
         <div>
           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Your Camport</p>
           <h1 className="mt-1 text-3xl font-black tracking-tight lg:text-4xl">Activity</h1>
-          <p className="mt-1 text-xs text-on-surface-variant lg:text-sm">Your Supabase-backed rental and food orders.</p>
+          <p className="mt-1 text-xs text-on-surface-variant lg:text-sm">Keep track of your rentals and snack orders.</p>
         </div>
         <button
           type="button"
@@ -104,7 +104,7 @@ const Orders: React.FC = () => {
             <p className="mt-1 text-xs text-on-surface-variant">
               {latestBooking
                 ? getBookingSubtitle(latestBooking)
-                : 'Cycle rentals and food listings are loaded from Supabase.'}
+                : 'Find a nearby cycle rental or order snacks.'}
             </p>
             {latestBooking && (
               <div className="mt-3 flex items-center justify-between gap-3">

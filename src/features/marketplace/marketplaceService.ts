@@ -115,7 +115,7 @@ export const marketplaceService = {
 
     const cycleService = cycleConfigResult.data as CycleServiceRecord | null;
     if ((cycleListingsResult.data?.length ?? 0) > 0 && !cycleService) {
-      throw new Error('Cycle rental settings are missing from Supabase.');
+      throw new Error('Cycle rental settings are unavailable.');
     }
     const cycleListings = (cycleListingsResult.data ?? []) as CycleListing[];
     const foodProducts = (foodResult.data ?? []) as unknown as FoodProductRecord[];

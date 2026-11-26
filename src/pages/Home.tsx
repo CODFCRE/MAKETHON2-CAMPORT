@@ -173,7 +173,7 @@ const Home: React.FC = () => {
           <div className="mb-3 flex items-center justify-between">
             <div>
               <h2 className="text-base font-black tracking-tight">Available now</h2>
-              <p className="mt-0.5 text-[11px] text-on-surface-variant">Listings and prices from Supabase.</p>
+              <p className="mt-0.5 text-[11px] text-on-surface-variant">Discover local favorites available now.</p>
             </div>
             <button onClick={() => navigate('/services')} className="inline-flex items-center gap-1 text-xs font-bold text-primary">
               See all <ArrowRight size={14} />
@@ -215,7 +215,7 @@ const Home: React.FC = () => {
             </div>
           ) : (
             <div className="ios-card p-5 text-xs text-on-surface-variant">
-              {error ? 'Service listings could not be loaded.' : 'Add active cycle or food listings in Supabase to get started.'}
+              {error ? 'Service listings could not be loaded.' : 'No cycle rentals or snacks are available yet.'}
             </div>
           )}
         </section>

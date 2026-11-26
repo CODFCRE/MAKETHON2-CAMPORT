@@ -197,8 +197,8 @@ const BookingDialog: React.FC<BookingDialogProps> = ({
           </div>
           <p className="text-center text-[10px] leading-4 text-on-surface-variant">
             {service.type === 'rent'
-              ? 'Your pass eligibility and credit charge are checked by Supabase when you submit.'
-              : 'Your order total is calculated from the current menu price on Supabase.'}
+              ? 'Your pass eligibility and credit charge are confirmed when you submit.'
+              : 'Your order total uses the current menu price.'}
           </p>
         </form>
       </section>
