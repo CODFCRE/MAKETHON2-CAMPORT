@@ -91,3 +91,23 @@ The app is available at http://localhost:8080. Docker Compose proxies `/api`
 and `/health` requests to the Express API. Stop the containers with
 `docker compose down`. If port 8080 is already in use, set `CAMPORT_PORT` in
 `.env` to a free port before starting the stack.
+
+## Earn credits and cycle passes
+
+After the existing Supabase `profiles` and `rent_bookings` tables are set up,
+run [`supabase/earn_credits_and_rentals.sql`](./supabase/earn_credits_and_rentals.sql)
+in the Supabase SQL editor. It creates private report evidence storage, credit
+wallets and ledger entries, reviewer permissions, demo cycle passes, and the
+database functions that approve reports and enforce rental credit/plan limits.
+
+To authorize a reviewer, an administrator inserts their authenticated user ID
+into `public.garbage_report_reviewers`; the migration includes the SQL template.
+Reports require a photo, GPS location, and description, and earn 2 credits only
+after reviewer approval. Credits are worth ₹1 for rentals, which cost 40
+credits/hour outside included pass time.
+
+The ₹199 Starter and ₹299 Plus passes last three months and have daily limits
+of 2 rentals/2 hours and 4 rentals/4 hours respectively. Pass activation is
+demo-only and does not charge users; real subscription checkout is not
+connected. Cycle requests are saved, but there is no live rental partner or
+fleet fulfillment integration yet.

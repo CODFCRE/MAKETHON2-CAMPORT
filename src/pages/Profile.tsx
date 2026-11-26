@@ -3,6 +3,7 @@ import { CarFront, ChevronRight, CircleHelp, Clock3, LogIn, LogOut, MessageCircl
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/ui/Button';
+import CycleSubscriptionPanel from '../components/profile/CycleSubscriptionPanel';
 import { useUserStore } from '../store/useUserStore';
 
 const Profile: React.FC = () => {
@@ -25,7 +26,7 @@ const Profile: React.FC = () => {
 
   const quickActions = [
     { label: 'Help', icon: CircleHelp, onClick: () => navigate('/settings/support') },
-    { label: 'Wallet', icon: Wallet, onClick: () => showComingSoon('Wallet') },
+    { label: 'Credits', icon: Wallet, onClick: () => navigate('/earn') },
     { label: 'Trips', icon: Clock3, onClick: () => navigate('/orders') },
   ];
 
@@ -58,6 +59,8 @@ const Profile: React.FC = () => {
           ))}
         </div>
       </header>
+
+      <CycleSubscriptionPanel />
 
       <section className="px-5 pt-3 lg:px-0 lg:pt-0 lg:row-span-2">
         {menuItems.map(({ label, icon: Icon, onClick, detail }) => (

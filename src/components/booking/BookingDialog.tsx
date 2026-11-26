@@ -2,8 +2,11 @@ import React, { useCallback, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { CreditCard, MapPin, Minus, Plus, Star, X } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 import type { Booking, LatLngPoint, MarketplaceService } from '../../types/booking';
 import { saveBooking } from '../../utils/bookings';
+import { earnService } from '../../features/earn/earnService';
+import { useUserStore } from '../../store/useUserStore';
 import RouteMapPreview, { type RouteMetrics } from '../common/RouteMapPreview';
 import PlaceAutocompleteInput from '../maps/PlaceAutocompleteInput';
 import type { SelectedPlaceValue } from '../../lib/googleMaps';
@@ -27,6 +30,8 @@ const BookingDialog: React.FC<BookingDialogProps> = ({
   onClose,
   onBooked,
 }) => {
+  const navigate = useNavigate();
+  const { user } = useUserStore();
   const [pickup, setPickup] = useState(defaultPickup);
   const [pickupCoords, setPickupCoords] = useState<LatLngPoint | null>(defaultPickupCoords);
   const [destination, setDestination] = useState(defaultDestination);
@@ -34,6 +39,7 @@ const BookingDialog: React.FC<BookingDialogProps> = ({
   const [routeMetrics, setRouteMetrics] = useState<RouteMetrics | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [fulfillment, setFulfillment] = useState<'delivery' | 'pickup'>('delivery');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const isRide = service.type === 'ride';
   const isRental = service.type === 'rent';
 
@@ -51,8 +57,33 @@ const BookingDialog: React.FC<BookingDialogProps> = ({
     setRouteMetrics(metrics);
   }, []);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (isRental) {
+      if (!user) {
+        toast.error('Sign in to rent a cycle.');
+        navigate('/login');
+        return;
+      }
+
+      setIsSubmitting(true);
+      try {
+        const rental = await earnService.bookCycleRental(pickup.trim(), quantity);
+        toast.success(
+          rental.billing_source === 'subscription'
+            ? 'Cycle requested using your demo pass.'
+            : `Cycle requested · ${rental.credits_charged} credits used.`,
+        );
+        onBooked();
+      } catch (error) {
+        console.error('Unable to request cycle rental:', error);
+        toast.error(error instanceof Error ? error.message : 'Could not request the cycle rental.');
+      } finally {
+        setIsSubmitting(false);
+      }
+      return;
+    }
+
     const booking: Booking = {
       id: crypto.randomUUID(),
       serviceId: service.id,
@@ -235,12 +266,12 @@ const BookingDialog: React.FC<BookingDialogProps> = ({
             <div className="booking-field flex items-center justify-between rounded-2xl border border-white/5 p-4">
               <div>
                 <p className="text-sm font-bold text-white">{isRental ? 'Rental duration' : 'Quantity'}</p>
-                <p className="text-xs text-on-surface-variant">₹{service.price} {isRental ? service.priceUnit : 'each'}</p>
+                <p className="text-xs text-on-surface-variant">{isRental ? '40 credits per hour outside your pass' : `₹${service.price} each`}</p>
               </div>
               <div className="flex items-center gap-4">
                 <button type="button" aria-label={isRental ? 'Decrease rental hours' : 'Decrease quantity'} disabled={quantity <= 1} onClick={() => setQuantity((value) => value - 1)} className="rounded-full bg-white/5 p-2 text-white disabled:opacity-30"><Minus size={14} /></button>
                 <span className="text-center text-sm font-black text-white">{quantity}{isRental ? ` ${quantity === 1 ? 'hour' : 'hours'}` : ''}</span>
-                <button type="button" aria-label={isRental ? 'Increase rental hours' : 'Increase quantity'} onClick={() => setQuantity((value) => value + 1)} className="rounded-full bg-white/5 p-2 text-white"><Plus size={14} /></button>
+                <button type="button" aria-label={isRental ? 'Increase rental hours' : 'Increase quantity'} disabled={isRental && quantity >= 4} onClick={() => setQuantity((value) => value + 1)} className="rounded-full bg-white/5 p-2 text-white disabled:opacity-30"><Plus size={14} /></button>
               </div>
             </div>
           )}
@@ -263,14 +294,16 @@ const BookingDialog: React.FC<BookingDialogProps> = ({
           <div className="flex items-center justify-between border-t border-white/5 pt-4">
             <div>
               <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Estimated total</p>
-              <p className="text-2xl font-black text-white">₹{service.price * quantity}</p>
+              <p className="text-2xl font-black text-white">{isRental ? `${40 * quantity} credits` : `₹${service.price * quantity}`}</p>
             </div>
-            <button type="submit" className="rounded-full bg-primary px-6 py-3.5 text-sm font-black text-white shadow-lg shadow-primary/20 active:scale-95">
-              {isRide ? 'Find a ride' : isRental ? 'Request rental' : 'Place order'}
+            <button type="submit" disabled={isSubmitting} className="rounded-full bg-primary px-6 py-3.5 text-sm font-black text-white shadow-lg shadow-primary/20 active:scale-95 disabled:opacity-50">
+              {isSubmitting ? 'Submitting…' : isRide ? 'Find a ride' : isRental ? 'Request rental' : 'Place order'}
             </button>
           </div>
           <p className="text-center text-[10px] leading-4 text-on-surface-variant">
-            Demo request only. No local rental partner, driver, store, or payment provider is connected yet.
+            {isRental
+              ? 'An active demo pass may cover this rental. Otherwise, 40 credits are charged per hour. No real subscription payment is processed.'
+              : 'Demo request only. No local driver, store, or payment provider is connected yet.'}
           </p>
         </form>
       </section>

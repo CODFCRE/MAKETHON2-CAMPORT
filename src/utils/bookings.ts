@@ -15,7 +15,9 @@ const isBooking = (value: unknown): value is Booking => {
     typeof booking.destination === 'string' &&
     (booking.fulfillment === 'ride' || booking.fulfillment === 'delivery' || booking.fulfillment === 'pickup' || booking.fulfillment === 'rental') &&
     booking.status === 'Requested' &&
-    typeof booking.createdAt === 'string';
+    typeof booking.createdAt === 'string' &&
+    (booking.billingSource === undefined || booking.billingSource === 'credits' || booking.billingSource === 'subscription') &&
+    (booking.creditsCharged === undefined || typeof booking.creditsCharged === 'number');
 };
 
 export const getBookings = (): Booking[] => {

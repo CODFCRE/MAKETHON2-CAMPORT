@@ -17,6 +17,7 @@ const GigDetails = lazy(() => import('./pages/GigDetails'));
 const PostGig = lazy(() => import('./pages/PostGig'));
 const Login = lazy(() => import('./pages/Login'));
 const Notifications = lazy(() => import('./pages/Notifications'));
+const Earn = lazy(() => import('./pages/Earn'));
 const CategoryResults = lazy(() => import('./pages/CategoryResults'));
 const SearchResults = lazy(() => import('./pages/SearchResults'));
 const PublicProfile = lazy(() => import('./pages/PublicProfile'));
@@ -111,6 +112,11 @@ const AppContent: React.FC = () => {
           <Route path="services" element={<Services />} />
           <Route path="explore" element={<Services />} />
           <Route path="orders" element={<Orders />} />
+          <Route path="earn" element={
+            <AuthGuard>
+              <Earn />
+            </AuthGuard>
+          } />
           <Route path="explore/:categoryName" element={<CategoryResults />} />
           <Route path="search" element={<SearchResults />} />
           <Route path="gig/:id" element={<GigDetails />} />

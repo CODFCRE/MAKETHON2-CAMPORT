@@ -35,4 +35,6 @@ export interface Booking {
   fulfillment: 'ride' | 'delivery' | 'pickup' | 'rental';
   status: 'Requested';
   createdAt: string;
+  billingSource?: 'credits' | 'subscription';
+  creditsCharged?: number;
 }

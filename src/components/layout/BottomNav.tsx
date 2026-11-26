@@ -1,5 +1,5 @@
 import React from 'react';
-import { Clock3, Home, LayoutGrid, User } from 'lucide-react';
+import { Clock3, Coins, Home, LayoutGrid, User } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { cn } from '../../utils/helpers';
 
@@ -11,6 +11,7 @@ const BottomNav: React.FC = () => {
     { label: 'Home', icon: Home, path: '/' },
     { label: 'Activity', icon: Clock3, path: '/orders' },
     { label: 'Services', icon: LayoutGrid, path: '/services' },
+    { label: 'Earn', icon: Coins, path: '/earn' },
     { label: 'Profile', icon: User, path: '/profile' },
   ];
 

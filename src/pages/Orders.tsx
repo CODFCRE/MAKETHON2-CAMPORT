@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ArrowRight, Bike, CarFront, Clock3, PackageCheck, Sandwich } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import RouteMapPreview from '../components/common/RouteMapPreview';
 import type { Booking, ServiceType } from '../types/booking';
 import { getBookings } from '../utils/bookings';
+import { earnService } from '../features/earn/earnService';
+import { useUserStore } from '../store/useUserStore';
 
 const serviceShortcuts: { label: string; type: ServiceType; icon: typeof CarFront }[] = [
   { label: 'Book a ride', type: 'ride', icon: CarFront },
@@ -31,15 +33,53 @@ const getBookingIcon = (booking: Booking) => {
 };
 
 const Orders: React.FC = () => {
-  const [{ bookings, loadError }] = useState(() => {
+  const [{ localBookings, loadError }] = useState(() => {
     try {
-      return { bookings: getBookings(), loadError: '' };
+      return { localBookings: getBookings(), loadError: '' };
     } catch (error) {
       console.error('Unable to load saved bookings:', error);
-      return { bookings: [] as Booking[], loadError: 'Could not load saved requests from this device.' };
+      return { localBookings: [] as Booking[], loadError: 'Could not load saved requests from this device.' };
     }
   });
+  const { user } = useUserStore();
+  const [cycleBookings, setCycleBookings] = useState<Booking[]>([]);
+  const [cycleLoadError, setCycleLoadError] = useState('');
+  const [isLoadingCycleBookings, setIsLoadingCycleBookings] = useState(Boolean(user));
+
+  useEffect(() => {
+    let active = true;
+    if (!user) {
+      setCycleBookings([]);
+      setIsLoadingCycleBookings(false);
+      return;
+    }
+
+    setIsLoadingCycleBookings(true);
+    earnService.getCycleRentalBookings(user.id)
+      .then((rentals) => {
+        if (active) {
+          setCycleBookings(rentals);
+          setCycleLoadError('');
+        }
+      })
+      .catch((error: unknown) => {
+        console.error('Unable to load cycle rental activity:', error);
+        if (active) setCycleLoadError(error instanceof Error ? error.message : 'Could not load cycle rentals.');
+      })
+      .finally(() => {
+        if (active) setIsLoadingCycleBookings(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [user]);
+
   const navigate = useNavigate();
+  const bookings = useMemo(
+    () => [...cycleBookings, ...localBookings].sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt)),
+    [cycleBookings, localBookings],
+  );
   const latestBooking = bookings[0];
 
   return (
@@ -100,7 +140,9 @@ const Orders: React.FC = () => {
                     <div className="h-full w-1/4 rounded-full bg-primary" />
                   </div>
                   <p className="mt-2 text-[10px] leading-4 text-on-surface-variant">
-                    Saved on this device. Live partner tracking is not connected yet.
+                    {latestBooking.billingSource
+                      ? 'Cycle request saved to your account. Partner fulfillment is not connected yet.'
+                      : 'Saved on this device. Live partner tracking is not connected yet.'}
                   </p>
                 </div>
               ) : (
@@ -147,10 +189,13 @@ const Orders: React.FC = () => {
             {bookings.length > 0 && <span className="text-[10px] font-bold text-on-surface-variant">{bookings.length} total</span>}
           </div>
 
-          {loadError ? (
-            <div role="alert" className="rounded-2xl border border-error/20 bg-error/10 px-4 py-4 text-sm text-error">
-              {loadError}
-            </div>
+          {(loadError || cycleLoadError) && (
+          <div role="alert" className="mb-3 rounded-2xl border border-error/20 bg-error/10 px-4 py-3 text-xs text-error">
+            {loadError || cycleLoadError}
+          </div>
+          )}
+          {isLoadingCycleBookings && bookings.length === 0 ? (
+          <div className="ios-card p-5 text-xs text-on-surface-variant">Loading activity…</div>
           ) : bookings.length > 0 ? (
             <div className="space-y-3">
               {bookings.map((booking) => {
@@ -168,7 +213,13 @@ const Orders: React.FC = () => {
                       </p>
                     </div>
                     <div className="shrink-0 text-right">
-                      <p className="text-xs font-black text-on-surface">₹{booking.amount}</p>
+                      <p className="text-xs font-black text-on-surface">
+                        {booking.billingSource === 'subscription'
+                          ? 'Pass included'
+                          : booking.creditsCharged !== undefined
+                            ? `${booking.creditsCharged} credits`
+                            : `₹${booking.amount}`}
+                      </p>
                       <p className="mt-1 inline-flex items-center gap-1 text-[9px] font-bold text-primary">
                         <Clock3 size={10} /> {booking.status}
                       </p>
