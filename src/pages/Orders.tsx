@@ -8,7 +8,7 @@ import { useUserStore } from '../store/useUserStore';
 
 const serviceShortcuts: { label: string; type: ServiceType; icon: typeof Bike }[] = [
   { label: 'Rent a cycle', type: 'rent', icon: Bike },
-  { label: 'Order food', type: 'snack', icon: Sandwich },
+  { label: 'Order snacks', type: 'snack', icon: Sandwich },
 ];
 
 const getBookingSubtitle = (booking: Booking) => {

@@ -62,7 +62,7 @@ const BookingDialog: React.FC<BookingDialogProps> = ({
           fulfillment,
           fulfillment === 'delivery' ? pickup.trim() : null,
         );
-        toast.success('Food order placed.');
+        toast.success('Snack order placed.');
       }
       onBooked();
     } catch (error) {

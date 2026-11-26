@@ -87,7 +87,7 @@ const Home: React.FC = () => {
         <div className="relative z-10 max-w-[72%]">
           <p className="text-[9px] font-black uppercase tracking-[0.2em] text-black/55">Camport · local services</p>
           <h2 className="mt-2 text-2xl font-black leading-tight tracking-tight lg:text-4xl">Your neighborhood,<br />one tap away.</h2>
-          <p className="mt-2 max-w-sm text-xs font-medium text-black/65 lg:text-sm">Rent a cycle or order food from the live catalog.</p>
+          <p className="mt-2 max-w-sm text-xs font-medium text-black/65 lg:text-sm">Rent a cycle or order snacks from the live catalog.</p>
           <button
             type="button"
             onClick={() => navigate('/services')}
@@ -100,6 +100,25 @@ const Home: React.FC = () => {
           <div className="absolute inset-5 rounded-full border border-black/10" />
           <div className="absolute inset-10 rounded-full border border-black/10" />
         </div>
+      </section>
+
+      <section className="ios-card mt-4 flex items-center justify-between gap-4 p-4">
+        <div className="flex min-w-0 items-center gap-3">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/12 text-primary">
+            <Sandwich size={19} />
+          </span>
+          <div className="min-w-0">
+            <h2 className="text-sm font-black text-on-surface">Order snacks</h2>
+            <p className="mt-0.5 text-[10px] text-on-surface-variant">Browse the live menu</p>
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={() => navigate('/services?type=snack')}
+          className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary px-3 py-2.5 text-[10px] font-black text-[#191715]"
+        >
+          Browse <ArrowRight size={13} />
+        </button>
       </section>
 
       {error && (

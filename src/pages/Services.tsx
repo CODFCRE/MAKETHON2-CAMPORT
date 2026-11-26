@@ -141,7 +141,7 @@ const Services: React.FC = () => {
         {([
           { type: 'all' as const, label: 'All', icon: PackageCheck },
           { type: 'rent' as const, label: 'Rentals', icon: Bike },
-          { type: 'snack' as const, label: 'Food', icon: Sandwich },
+          { type: 'snack' as const, label: 'Snacks', icon: Sandwich },
         ]).map(({ type, label, icon: Icon }) => (
           <button
             key={type}
@@ -165,7 +165,11 @@ const Services: React.FC = () => {
 
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-xs font-black uppercase tracking-[0.18em] text-on-surface-variant">
-          {selectedCategory ? categories.find((category) => category.id === selectedCategory)?.title : 'Available now'}
+          {selectedCategory
+            ? categories.find((category) => category.id === selectedCategory)?.title
+            : activeType === 'snack'
+              ? 'Order snacks'
+              : 'Available now'}
         </h2>
         <span className="text-xs text-on-surface-variant">{results.length} options</span>
       </div>
