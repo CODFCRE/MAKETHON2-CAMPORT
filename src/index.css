@@ -1,0 +1,275 @@
+@import "tailwindcss";
+
+@theme {
+  /* Warm rideshare palette */
+  --color-primary: #F7A873;
+  --color-primary-dim: #D98251;
+  --color-secondary: #E8B28D;
+  --color-background: var(--app-background);
+  --color-surface: var(--app-surface);
+  --color-surface-container: var(--app-surface-container);
+  --color-on-surface: var(--app-on-surface);
+  --color-on-surface-variant: var(--app-on-surface-variant);
+  --color-error: #FF3B30; /* iOS Red */
+  --color-success: #34C759; /* iOS Green */
+  --color-warning: #FFB266;
+
+  --font-headline: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+
+  --radius-ios-card: 12px;
+  --radius-ios-button: 10px;
+}
+
+:root {
+  color-scheme: dark;
+  --app-background: #151514;
+  --app-surface: #222221;
+  --app-surface-container: #2D2D2B;
+  --app-on-surface: #FFFFFF;
+  --app-on-surface-variant: #8E8E93;
+  --app-border: rgb(255 255 255 / 5%);
+  --app-hover: rgb(255 255 255 / 5%);
+  --app-glass: rgb(24 24 27 / 70%);
+  --app-nav-background: rgb(25 25 24 / 95%);
+  --app-map-road: rgb(255 255 255 / 30%);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --app-background: #F5F6F7;
+  --app-surface: #FFFFFF;
+  --app-surface-container: #F0F1F2;
+  --app-on-surface: #191918;
+  --app-on-surface-variant: #71717A;
+  --app-border: rgb(25 25 24 / 8%);
+  --app-hover: rgb(25 25 24 / 4%);
+  --app-glass: rgb(255 255 255 / 92%);
+  --app-nav-background: rgb(255 255 255 / 95%);
+  --app-map-road: rgb(25 25 24 / 12%);
+}
+
+@layer base {
+  body {
+    @apply bg-background text-on-surface font-body;
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.011em;
+  }
+}
+
+@layer components {
+  .ios-glass {
+    @apply backdrop-blur-2xl;
+    background-color: var(--app-glass);
+    -webkit-backdrop-filter: blur(25px);
+  }
+
+  .ios-card {
+    @apply bg-surface border rounded-[20px] shadow-sm;
+    border-color: var(--app-border);
+  }
+
+  .theme-card {
+    background-color: #20201F;
+  }
+
+  .theme-card:hover {
+    background-color: #292928;
+  }
+
+  .theme-map-card {
+    background-color: #242423;
+  }
+
+  .theme-icon-surface {
+    background-color: #292928;
+  }
+
+  .app-nav-surface {
+    background-color: var(--app-nav-background);
+  }
+
+  .booking-field {
+    background-color: rgb(0 0 0 / 20%);
+  }
+
+  .route-map-preview {
+    background-color: var(--app-surface-container);
+  }
+
+  .route-map-road {
+    fill: none;
+    stroke: var(--app-map-road);
+    stroke-linecap: round;
+    stroke-width: 9;
+  }
+
+  .route-map-road-wide {
+    stroke-width: 15;
+  }
+
+  .route-map-line {
+    fill: none;
+    stroke: var(--color-primary);
+    stroke-linecap: round;
+    stroke-width: 5;
+    stroke-dasharray: 1 1;
+  }
+
+  .route-map-origin {
+    fill: var(--color-primary);
+    stroke: var(--app-surface);
+    stroke-width: 4;
+  }
+
+  .route-map-destination {
+    fill: var(--app-surface);
+    stroke: var(--color-primary);
+    stroke-width: 4;
+  }
+
+  .ios-list-item {
+    @apply flex items-center justify-between py-3 border-b last:border-0 transition-colors;
+    border-color: var(--app-border);
+  }
+
+  .ios-list-item:active {
+    background-color: var(--app-hover);
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .ios-transition {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+:root[data-theme='light'] [class~='text-white'] {
+  color: var(--app-on-surface) !important;
+}
+
+:root[data-theme='light'] [class*='text-white/'] {
+  color: var(--app-on-surface-variant) !important;
+}
+
+:root[data-theme='light'] [class~='text-black'] {
+  color: #191918 !important;
+}
+
+:root[data-theme='light'] [class~='bg-black'] {
+  background-color: var(--app-surface) !important;
+}
+
+:root[data-theme='light'] [class~='bg-zinc-900'],
+:root[data-theme='light'] [class~='bg-zinc-900/70'],
+:root[data-theme='light'] [class~='bg-zinc-900/80'],
+:root[data-theme='light'] [class~='bg-zinc-800'] {
+  background-color: var(--app-surface) !important;
+}
+
+:root[data-theme='light'] [class~='bg-zinc-800/60'] {
+  background-color: var(--app-surface-container) !important;
+}
+
+:root[data-theme='light'] .booking-field {
+  background-color: var(--app-surface-container);
+}
+
+:root[data-theme='light'] .media-stage [class~='bg-black/20'] {
+  background-color: rgb(0 0 0 / 20%) !important;
+}
+
+:root[data-theme='light'] .theme-card,
+:root[data-theme='light'] .theme-map-card,
+:root[data-theme='light'] .theme-icon-surface {
+  background-color: var(--app-surface-container) !important;
+}
+
+:root[data-theme='light'] .theme-card:hover {
+  background-color: var(--app-surface-container) !important;
+}
+
+:root[data-theme='light'] [class~='bg-white'] {
+  background-color: #FFFFFF !important;
+}
+
+:root[data-theme='light'] [class~='bg-white/5'] {
+  background-color: var(--app-hover) !important;
+}
+
+:root[data-theme='light'] [class~='bg-white/10'] {
+  background-color: rgb(25 25 24 / 8%) !important;
+}
+
+:root[data-theme='light'] [class~='bg-white/20'] {
+  background-color: rgb(25 25 24 / 12%) !important;
+}
+
+:root[data-theme='light'] [class~='border-white/5'],
+:root[data-theme='light'] [class~='border-white/10'] {
+  border-color: var(--app-border) !important;
+}
+
+:root[data-theme='light'] [class~='divide-white/5'] > :not(:last-child) {
+  border-color: var(--app-border) !important;
+}
+
+:root[data-theme='light'] [class~='hover:bg-white/5']:hover,
+:root[data-theme='light'] [class~='active:bg-white/10']:active {
+  background-color: var(--app-hover) !important;
+}
+
+:root[data-theme='light'] [class~='hover:text-white']:hover {
+  color: var(--app-on-surface) !important;
+}
+
+:root[data-theme='light'] .media-overlay [class~='text-white'],
+:root[data-theme='light'] .media-overlay [class*='text-white/'] {
+  color: #FFFFFF !important;
+}
+
+:root[data-theme='light'] .media-overlay[class~='text-white'] {
+  color: #FFFFFF !important;
+}
+
+:root[data-theme='light'] .media-stage,
+:root[data-theme='light'] .media-stage [class~='bg-black'],
+:root[data-theme='light'] .media-stage [class~='bg-zinc-900'] {
+  background-color: #000000 !important;
+}
+
+:root[data-theme='light'] .media-stage [class~='text-white'],
+:root[data-theme='light'] .media-stage [class*='text-white/'] {
+  color: #FFFFFF !important;
+}
+
+:root[data-theme='light'] .media-stage[class~='text-white'] {
+  color: #FFFFFF !important;
+}
+
+:root[data-theme='light'] .activity-map-overlay {
+  background-image: none !important;
+}
+
+/* iOS-like Bounce Scroll Simulation for Web (Only UI feel) */
+.ios-scroll {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-ios {
+  animation: fade-in-up 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}

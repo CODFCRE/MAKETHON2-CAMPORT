@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#dae6fe",
+                    "outline": "#767575",
+                    "on-secondary-fixed-variant": "#4d5d73",
+                    "primary-fixed": "#d8e2ff",
+                    "surface-variant": "#252626",
+                    "tertiary": "#f0f3ff",
+                    "on-tertiary-fixed-variant": "#535e72",
+                    "on-error-container": "#ff9993",
+                    "on-secondary-container": "#b0c0da",
+                    "outline-variant": "#484848",
+                    "on-tertiary-container": "#495468",
+                    "tertiary-dim": "#ccd7ef",
+                    "surface-container-high": "#1f2020",
+                    "on-primary-fixed-variant": "#0057bd",
+                    "surface-container-lowest": "#000000",
+                    "secondary": "#8f9fb7",
+                    "on-surface": "#e7e5e5",
+                    "primary-container": "#004395",
+                    "primary-dim": "#98b8ff",
+                    "primary-fixed-dim": "#c3d4ff",
+                    "error-container": "#7f2927",
+                    "inverse-primary": "#005bc4",
+                    "surface-container": "#191a1a",
+                    "on-primary-fixed": "#003c86",
+                    "on-secondary": "#102134",
+                    "surface-container-highest": "#252626",
+                    "on-tertiary-fixed": "#374155",
+                    "on-background": "#e7e5e5",
+                    "on-primary": "#003d88",
+                    "surface-container-low": "#131313",
+                    "inverse-on-surface": "#565555",
+                    "error": "#ee7d77",
+                    "secondary-dim": "#8f9fb7",
+                    "secondary-fixed-dim": "#c5d6f0",
+                    "background": "#0e0e0e",
+                    "surface-bright": "#2b2c2c",
+                    "on-secondary-fixed": "#314055",
+                    "secondary-container": "#2d3c51",
+                    "primary": "#adc6ff",
+                    "tertiary-fixed-dim": "#ccd7ef",
+                    "secondary-fixed": "#d3e4fe",
+                    "on-surface-variant": "#acabaa",
+                    "on-primary-container": "#bdd0ff",
+                    "on-tertiary": "#515c70",
+                    "error-dim": "#bb5551",
+                    "tertiary-container": "#dae6fe",
+                    "surface-tint": "#adc6ff",
+                    "inverse-surface": "#fcf9f8",
+                    "surface-dim": "#0e0e0e",
+                    "surface": "#0e0e0e",
+                    "on-error": "#490106"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(19, 19, 19, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .ghost-border {
+            border: 1px solid rgba(72, 72, 72, 0.15);
+        }
+        .glow-button {
+            background: linear-gradient(135deg, #adc6ff 0%, #004395 100%);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        .ai-shimmer {
+            background: linear-gradient(90deg, transparent, rgba(173, 198, 255, 0.1), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite linear;
+        }
+        @keyframes shimmer {
+            from { background-position: 200% 0; }
+            to { background-position: -200% 0; }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-zinc-900/70 backdrop-blur-lg flex items-center justify-between px-6 h-16 w-full border-b border-white/5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-white/10">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="Close up portrait of a creative professional man with a friendly expression in a modern studio setting with soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1nrJsj_LmMYXfTXrCzK1GlfjJKNLp4Ag_629uRdflch8JIzxww-ywoGO5h5rX4zASJGBCCepUMQpqprFmrqLHT3dUJk6SirGKVYw-TVr-_5ulh484vMJakIlcHbXBHVV_4UMRDoGqW4qm6cNHbJph7UqtmkXdGH9TDUyym--Chn--dt8bDNisVPz2mW--x47uIxnN1QJWF7vqP76GbC5-_OMqz4j4KRjaQ_bCbF9ye-w7DwRqYFPnAqG9kf8iVOMPr9IeAtFPHi8"/>
+</div>
+<h1 class="text-xl font-bold text-zinc-100 tracking-tighter">QuickGig</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-zinc-500 hover:opacity-80 transition-opacity active:scale-95 duration-200">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column: Form -->
+<div class="lg:col-span-7 space-y-8">
+<section>
+<div class="flex items-center justify-between">
+<div>
+<h2 class="text-3xl font-extrabold tracking-tight mb-2 text-on-surface">Create New Gig</h2>
+<p class="text-on-surface-variant body-lg">Showcase your skills to the world.</p>
+</div>
+<div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20">
+<span class="material-symbols-outlined text-[18px] text-primary" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="text-[10px] font-bold text-primary uppercase tracking-wider">AI Assistant Active</span>
+</div>
+</div>
+</section>
+<!-- Upload Area -->
+<div class="relative group">
+<div class="w-full aspect-video rounded-xl bg-surface-container-lowest ghost-border flex flex-col items-center justify-center cursor-pointer overflow-hidden transition-all duration-300 hover:bg-surface-container-low">
+<div class="flex flex-col items-center gap-3 text-on-surface-variant group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-5xl" style="font-variation-settings: 'wght' 300;">cloud_upload</span>
+<span class="label-md uppercase tracking-[0.05em] font-bold">Drag &amp; Drop Skill Video</span>
+</div>
+<p class="mt-2 text-xs text-outline text-center px-8">High-quality MP4 or MOV preferred. Max 100MB.</p>
+</div>
+</div>
+<!-- Form Fields -->
+<div class="space-y-6">
+<!-- Title -->
+<div class="space-y-2">
+<div class="flex justify-between items-center px-1">
+<label class="text-[0.75rem] uppercase tracking-[0.05em] font-bold text-on-surface-variant">Gig Title</label>
+<button class="flex items-center gap-1.5 text-primary hover:text-primary-fixed-dim transition-colors group">
+<span class="material-symbols-outlined text-[16px]">auto_awesome</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Auto-generate</span>
+</button>
+</div>
+<input class="w-full h-14 px-4 rounded-xl bg-surface-container-lowest ghost-border border-none focus:ring-1 focus:ring-primary-container text-on-surface placeholder:text-outline transition-all" placeholder="I will design your brand identity..." type="text"/>
+</div>
+<!-- Description -->
+<div class="space-y-2">
+<div class="flex justify-between items-center px-1">
+<label class="text-[0.75rem] uppercase tracking-[0.05em] font-bold text-on-surface-variant">Description</label>
+<button class="flex items-center gap-1.5 text-primary hover:text-primary-fixed-dim transition-colors group">
+<span class="material-symbols-outlined text-[16px]">auto_awesome</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Auto-generate</span>
+</button>
+</div>
+<textarea class="w-full p-4 rounded-xl bg-surface-container-lowest ghost-border border-none focus:ring-1 focus:ring-primary-container text-on-surface placeholder:text-outline transition-all resize-none" placeholder="Briefly describe what you're offering..." rows="4"></textarea>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Category -->
+<div class="space-y-2">
+<label class="text-[0.75rem] uppercase tracking-[0.05em] font-bold text-on-surface-variant px-1">Category</label>
+<select class="w-full h-14 px-4 rounded-xl bg-surface-container-lowest ghost-border border-none focus:ring-1 focus:ring-primary-container text-on-surface appearance-none transition-all">
+<option>Graphic Design</option>
+<option>Video Editing</option>
+<option>Development</option>
+<option>Writing</option>
+<option>Voice Over</option>
+</select>
+</div>
+<!-- Price -->
+<div class="space-y-2">
+<div class="flex justify-between items-center px-1">
+<label class="text-[0.75rem] uppercase tracking-[0.05em] font-bold text-on-surface-variant">Starting Price ($)</label>
+<div class="flex items-center gap-1 text-[10px] font-bold text-secondary-dim bg-secondary-container/30 px-2 py-0.5 rounded">
+<span class="material-symbols-outlined text-[14px]">insights</span>
+<span class="uppercase tracking-wider">Suggested: $45-65</span>
+</div>
+</div>
+<input class="w-full h-14 px-4 rounded-xl bg-surface-container-lowest ghost-border border-none focus:ring-1 focus:ring-primary-container text-on-surface placeholder:text-outline transition-all" placeholder="50" type="number"/>
+</div>
+</div>
+<!-- First Order Discount Toggle -->
+<div class="p-4 rounded-2xl bg-surface-container-low ghost-border flex items-center justify-between transition-all hover:bg-surface-container">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">sell</span>
+</div>
+<div>
+<h4 class="text-sm font-bold text-on-surface">First Order Discount</h4>
+<p class="text-xs text-outline">Offer 10% off to your first 3 customers</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Delivery Time -->
+<div class="space-y-2">
+<label class="text-[0.75rem] uppercase tracking-[0.05em] font-bold text-on-surface-variant px-1">Delivery Time</label>
+<div class="flex flex-wrap gap-3">
+<button class="px-5 py-3 rounded-lg bg-primary-container text-on-primary-container text-sm font-semibold transition-all">24 Hours</button>
+<button class="px-5 py-3 rounded-lg bg-surface-container-highest ghost-border text-on-surface text-sm font-semibold hover:bg-surface-bright transition-all">3 Days</button>
+<button class="px-5 py-3 rounded-lg bg-surface-container-highest ghost-border text-on-surface text-sm font-semibold hover:bg-surface-bright transition-all">1 Week</button>
+<button class="px-5 py-3 rounded-lg bg-surface-container-highest ghost-border text-on-surface text-sm font-semibold hover:bg-surface-bright transition-all">Custom</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Preview & Sticky Action -->
+<div class="lg:col-span-5 relative">
+<div class="sticky top-24 space-y-8">
+<!-- Preview Section -->
+<div class="space-y-4">
+<h3 class="label-md uppercase tracking-[0.1em] font-bold text-primary px-1">Live Feed Preview</h3>
+<div class="rounded-[2rem] overflow-hidden bg-surface-container-low ghost-border shadow-2xl relative aspect-[9/16] max-w-[320px] mx-auto group">
+<!-- Simulated Video/Image Preview -->
+<img alt="Gig preview" class="absolute inset-0 w-full h-full object-cover brightness-75 transition-transform duration-700 group-hover:scale-105" data-alt="Cinematic shot of a designer working on a high-end workstation with neon accent lighting in a dark modern studio" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnqf-rJbRUNDGt_wYbAuNeBKvUbZnQzII8syc1zt8JSL-Cd2n4K_PsCr26yoTJz7REtHAD1KNZqNga9mXO5uQhKNMzMCiPTrn-_rClfbGsbaifq_xoOEbDGhrGmecrm4bmHaX7aEAobKnSF6wDBkY9I2c0bfnzWhV0CmT25eMJKzlZDEUkpRWBwdgeXN202DYjMZAuiHKFFPuncFj8p-MLaxTr_EA93sVkJ69-DFRK7nObXnVjtJGVDkf79SgGsv6Tv063jP0b5ys"/>
+<!-- Overlay Content -->
+<div class="absolute inset-0 p-6 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/20 to-transparent">
+<div class="flex items-center gap-2 mb-3">
+<div class="w-8 h-8 rounded-full border border-white/20 overflow-hidden">
+<img alt="Avatar" data-alt="User avatar profile photo of a creative professional" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiodZN97Xq8W_uB5RAsuSmNCpOGBCOerofy6maiIxyGZZcui1l4BwwiC5zGNeQd7-R43NLtgpxlp3mCqsNftRep8uigvHJejFWgF-sTmrBU9JQHZYQIYGM86mfhV808aNB95W81AfbpiW4EEMDbAXVCVfs1C9o-3cDaVVcm8uXxAhd5F_Fz8mLMghCZq_i-oQ2ZowMQj1-fb_aAp21yLOKMzhC1k-ZikmqYHz-nZHh1tRgUGLJETAUrF7x4IoK9b455iaHgMzDrNI"/>
+</div>
+<span class="text-xs font-bold text-white">@alexdesign</span>
+</div>
+<h4 class="text-white font-semibold leading-tight mb-2">I will design your brand identity...</h4>
+<div class="flex items-center justify-between">
+<span class="bg-primary-container/80 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold text-on-primary-container">GRAPHIC DESIGN</span>
+<span class="text-lg font-bold text-primary">$50</span>
+</div>
+</div>
+<!-- Pulse Indicator -->
+<div class="absolute top-4 right-4 flex items-center gap-2 px-2 py-1 rounded-full bg-black/40 backdrop-blur-sm">
+<div class="w-2 h-2 rounded-full bg-primary relative">
+<div class="absolute inset-0 w-full h-full rounded-full bg-primary animate-ping opacity-30"></div>
+</div>
+<span class="text-[10px] font-bold text-white tracking-widest uppercase">Live Preview</span>
+</div>
+</div>
+</div>
+<!-- Publish Button Container -->
+<div class="bg-surface-container-low p-6 rounded-3xl ghost-border space-y-4 shadow-xl">
+<div class="flex items-center justify-between text-on-surface-variant mb-2">
+<span class="text-sm">Platform Fee (5%)</span>
+<span class="text-sm font-semibold">$2.50</span>
+</div>
+<div class="flex items-center justify-between text-on-surface mb-6">
+<span class="font-bold">Estimated Earnings</span>
+<span class="text-xl font-extrabold text-primary">$47.50</span>
+</div>
+<button class="w-full h-16 rounded-full glow-button text-on-primary font-bold text-lg flex items-center justify-center gap-3 active:scale-95 transition-all duration-300 hover:shadow-[0_8px_24px_rgba(173,198,255,0.2)]">
+<span>Publish Gig</span>
+<span class="material-symbols-outlined">rocket_launch</span>
+</button>
+<p class="text-[10px] text-center text-outline uppercase tracking-widest px-4">By publishing, you agree to the QuickGig creator terms.</p>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-lg rounded-[2rem] border border-white/10 bg-zinc-800/60 backdrop-blur-xl flex justify-around items-center h-20 px-4 shadow-[0_12px_32px_rgba(173,198,255,0.08)] z-50">
+<a class="flex flex-col items-center justify-center text-zinc-400 opacity-60 hover:opacity-100 transition-all active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-inter text-[10px] uppercase tracking-[0.05em] font-bold">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-400 opacity-60 hover:opacity-100 transition-all active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined">search</span>
+<span class="font-inter text-[10px] uppercase tracking-[0.05em] font-bold">Explore</span>
+</a>
+<a class="flex flex-col items-center justify-center text-blue-300 relative scale-110 active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+<span class="font-inter text-[10px] uppercase tracking-[0.05em] font-bold">Upload</span>
+<div class="absolute -bottom-1 w-1 h-1 bg-blue-300 rounded-full blur-[2px]"></div>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-400 opacity-60 hover:opacity-100 transition-all active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="font-inter text-[10px] uppercase tracking-[0.05em] font-bold">Messages</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-400 opacity-60 hover:opacity-100 transition-all active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-inter text-[10px] uppercase tracking-[0.05em] font-bold">Profile</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/camport.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f7ad7c" />
+    <script>
+      const theme = localStorage.getItem('camport-theme') === 'light' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = theme;
+      if (theme === 'light') {
+        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#f5f6f7');
+      }
+    </script>
+    <meta name="description" content="Book neighborhood rides and order local food with Camport." />
+    <title>Camport — Rides, food & deliveries</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

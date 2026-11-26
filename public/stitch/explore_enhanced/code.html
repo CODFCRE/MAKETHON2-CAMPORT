@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>QuickGig - SkillTok Explore</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#dae6fe",
+                        "outline": "#767575",
+                        "on-secondary-fixed-variant": "#4d5d73",
+                        "primary-fixed": "#d8e2ff",
+                        "surface-variant": "#252626",
+                        "tertiary": "#f0f3ff",
+                        "on-tertiary-fixed-variant": "#535e72",
+                        "on-error-container": "#ff9993",
+                        "on-secondary-container": "#b0c0da",
+                        "outline-variant": "#484848",
+                        "on-tertiary-container": "#495468",
+                        "tertiary-dim": "#ccd7ef",
+                        "surface-container-high": "#1f2020",
+                        "on-primary-fixed-variant": "#0057bd",
+                        "surface-container-lowest": "#000000",
+                        "secondary": "#8f9fb7",
+                        "on-surface": "#e7e5e5",
+                        "primary-container": "#004395",
+                        "primary-dim": "#98b8ff",
+                        "primary-fixed-dim": "#c3d4ff",
+                        "error-container": "#7f2927",
+                        "inverse-primary": "#005bc4",
+                        "surface-container": "#191a1a",
+                        "on-primary-fixed": "#003c86",
+                        "on-secondary": "#102134",
+                        "surface-container-highest": "#252626",
+                        "on-tertiary-fixed": "#374155",
+                        "on-background": "#e7e5e5",
+                        "on-primary": "#003d88",
+                        "surface-container-low": "#131313",
+                        "inverse-on-surface": "#565555",
+                        "error": "#ee7d77",
+                        "secondary-dim": "#8f9fb7",
+                        "secondary-fixed-dim": "#c5d6f0",
+                        "background": "#0e0e0e",
+                        "surface-bright": "#2b2c2c",
+                        "on-secondary-fixed": "#314055",
+                        "secondary-container": "#2d3c51",
+                        "primary": "#adc6ff",
+                        "tertiary-fixed-dim": "#ccd7ef",
+                        "secondary-fixed": "#d3e4fe",
+                        "on-surface-variant": "#acabaa",
+                        "on-primary-container": "#bdd0ff",
+                        "on-tertiary": "#515c70",
+                        "error-dim": "#bb5551",
+                        "tertiary-container": "#dae6fe",
+                        "surface-tint": "#adc6ff",
+                        "inverse-surface": "#fcf9f8",
+                        "surface-dim": "#0e0e0e",
+                        "surface": "#0e0e0e",
+                        "on-error": "#490106"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #0e0e0e; color: #e7e5e5; }
+        .glass { background: rgba(37, 38, 38, 0.6); backdrop-filter: blur(20px); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .ghost-border { border: 1px solid rgba(72, 72, 72, 0.15); }
+        .gradient-btn { background: linear-gradient(135deg, #adc6ff 0%, #004395 100%); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .card-hover-glow:hover {
+            box-shadow: 0 0 20px 2px rgba(173, 198, 255, 0.15);
+            border-color: rgba(173, 198, 255, 0.3);
+        }
+        .ai-glow {
+            box-shadow: 0 0 20px rgba(173, 198, 255, 0.4);
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(173, 198, 255, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(173, 198, 255, 0.6); }
+        }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-surface selection:bg-primary/30 min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-zinc-900/70 backdrop-blur-lg flex items-center justify-between px-6 h-16 w-full shadow-none">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-white/10">
+<img alt="close-up portrait" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8xcwj9_Yuu8VexhD2lJ2ITz2eUnrUkvksuaL97eGgfNTdCAQKObrT-r3OZcHMwKAc2b85epaVVAo5qwe-o_ygGYWteiAreSeM4ZnDzl1bptps28aWcSrP2w1L92vBqgAPajT8G5MmIVDw8zgWw3irUHWSYXMjCBsA3dAQ42Oa3vJu-kYmJ1TKdszwmzYDo17UGumjaSDhzRkgRBMveMfxo4qvmUsu5FBogZ_Zy8yduzgsGHVGvwLIOHW0ZR5uoW-W5SzZ20HMvok"/>
+</div>
+<span class="text-xl font-bold text-zinc-100 tracking-tighter">QuickGig</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-zinc-500 hover:opacity-80 transition-opacity cursor-pointer active:scale-95 duration-200" data-icon="notifications">notifications</span>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-20 px-4 max-w-2xl mx-auto">
+<!-- Search Bar Section -->
+<section class="mb-8 mt-4">
+<div class="relative group">
+<div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-on-surface-variant text-xl" data-icon="search">search</span>
+</div>
+<input class="w-full h-14 pl-12 pr-4 bg-surface-container-lowest ghost-border rounded-xl text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:ring-1 focus:ring-primary/40 transition-all duration-300" placeholder="Find your next skill..." type="text"/>
+</div>
+</section>
+<!-- Horizontal Category Chips -->
+<section class="mb-10 -mx-4">
+<div class="flex overflow-x-auto no-scrollbar gap-3 px-4">
+<button class="px-6 py-2.5 rounded-full bg-primary text-on-primary text-xs font-bold tracking-wider whitespace-nowrap shadow-lg shadow-primary/10">
+                TRENDING
+            </button>
+<button class="px-6 py-2.5 rounded-full bg-surface-container-highest text-on-surface-variant text-xs font-bold tracking-wider whitespace-nowrap ghost-border">
+                DESIGN
+            </button>
+<button class="px-6 py-2.5 rounded-full bg-surface-container-highest text-on-surface-variant text-xs font-bold tracking-wider whitespace-nowrap ghost-border">
+                CODING
+            </button>
+<button class="px-6 py-2.5 rounded-full bg-surface-container-highest text-on-surface-variant text-xs font-bold tracking-wider whitespace-nowrap ghost-border">
+                WRITING
+            </button>
+<button class="px-6 py-2.5 rounded-full bg-surface-container-highest text-on-surface-variant text-xs font-bold tracking-wider whitespace-nowrap ghost-border">
+                VIDEO EDITING
+            </button>
+</div>
+</section>
+<!-- Trending Gigs Grid -->
+<div class="grid grid-cols-2 gap-4">
+<!-- Card 1 (Large - Trending) -->
+<div class="col-span-1 space-y-4">
+<div class="group relative bg-surface-container-low rounded-2xl overflow-hidden ghost-border transition-all duration-300 card-hover-glow">
+<div class="aspect-[3/4] relative">
+<img alt="abstract 3D render" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOh02Do1v5-vITZtGLEXXd4oolfWqx69LVxWN3O7M77T9-dorlzAhpPL6XoxLlzj-wSHsLy_kcdhNtF4kvuYpyOEvpTKUuTi_lbb-gTsoMKP5eBx6Qcs6soMEpSH12zjPb7Cu9xCY9rlSrHPF5eNUCTzr2z-0UvYMmO0_Rzqtbgc91dVdNVJPZD-1O7O6n-DaajwkDx4d6e-szvXEr63aE06AbW2uwN4ViIwGyOOhHM9nWUfzp7AxOKjOwVjAWOLzRn-atgh0P8sY"/>
+<div class="absolute top-3 left-3 flex flex-col gap-1.5">
+<span class="px-2 py-1 bg-surface-container-lowest/60 backdrop-blur-md rounded-md text-[10px] font-bold text-primary tracking-widest uppercase inline-block">Design</span>
+<span class="px-2 py-1 bg-blue-500/80 backdrop-blur-md rounded-md text-[9px] font-bold text-white tracking-widest uppercase flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px] fill-1" data-icon="trending_up">trending_up</span> TRENDING NOW
+                        </span>
+</div>
+</div>
+<div class="p-4 bg-gradient-to-t from-surface-container-low to-transparent">
+<h3 class="text-sm font-semibold text-on-surface leading-tight mb-1">Futuristic UI Kit for Mobile Apps</h3>
+<div class="flex items-center gap-1 mb-2">
+<span class="material-symbols-outlined text-[14px] text-yellow-500 fill-1" data-icon="star">star</span>
+<span class="text-[11px] font-bold text-on-surface">4.9</span>
+<span class="text-[11px] text-on-surface-variant">(128)</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1">
+<span class="text-xs text-on-surface-variant truncate">@lucas_v</span>
+<span class="material-symbols-outlined text-[14px] text-blue-400 fill-1" data-icon="verified">verified</span>
+</div>
+<span class="text-sm font-bold text-primary">$45</span>
+</div>
+</div>
+</div>
+<!-- Card 2 (Small - Discount) -->
+<div class="group relative bg-surface-container-low rounded-2xl overflow-hidden ghost-border transition-all duration-300 card-hover-glow">
+<div class="aspect-square relative">
+<img alt="mechanical keyboard" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5Frk1ASLetfHCKckGOG2ua_0ryGyuDiig7SRa_jXN3TI0Pgm88HvxMhGcNGN8ZGBicGEcAepIBTHu4G45HQXiruHPRmTRoIos2UxjnL7dy3Gv4jLJ_BBWDA609rYwLWt5ae4RvQJ64_I6TIIyn3FZ2AlAMr-ubyclvurBsJBsk-scItNsDyO-_pixBAsdFATQ9OdkEqAPs1sq0dmq5riZtWUy3me8kWtLmI47xPw1al3quy28zUnTyTyCC2C6ZE5b4XOkEVlMzCk"/>
+<div class="absolute top-3 left-3 flex flex-col gap-1.5">
+<span class="px-2 py-1 bg-surface-container-lowest/60 backdrop-blur-md rounded-md text-[10px] font-bold text-primary tracking-widest uppercase inline-block">Coding</span>
+<span class="px-2 py-1 bg-emerald-500/80 backdrop-blur-md rounded-md text-[9px] font-bold text-white tracking-widest uppercase">20% OFF FIRST ORDER</span>
+</div>
+</div>
+<div class="p-4">
+<h3 class="text-sm font-semibold text-on-surface leading-tight mb-1">Python Script for Scraping</h3>
+<div class="flex items-center gap-1 mb-2">
+<span class="material-symbols-outlined text-[14px] text-yellow-500 fill-1" data-icon="star">star</span>
+<span class="text-[11px] font-bold text-on-surface">5.0</span>
+<span class="text-[11px] text-on-surface-variant">(12)</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-xs text-on-surface-variant">@dev_kai</span>
+<span class="text-sm font-bold text-primary">$20</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 3 (Column 2) -->
+<div class="col-span-1 space-y-4 pt-6">
+<!-- Card 4 (Medium) -->
+<div class="group relative bg-surface-container-low rounded-2xl overflow-hidden ghost-border transition-all duration-300 card-hover-glow">
+<div class="aspect-square relative">
+<img alt="vintage typewriter" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2bE_PWHTjFwhAJKsivka7pRHskDg0sWYy7TGevLGi4KcMJlalLjcpoomGez9IHWOfAhPYbWJDAsBBPKqIhrJ4ZtQwzrA9gJ-ft7orsoqsRDYilKVf2Ql3jD-IQ-0I1qqNoRqhOTpenPUi8zSEqzQlOI5oN3CZ9CPlTN90VimAwaLlP8DHTu79LFxU5UZmlSVtk8JPURN_trOv5VYgy41R44QmWoFrd8zNWKGo0alm0qk_OeMnPl120lYH6JKUNlLJYl8Av8vxOnU"/>
+<div class="absolute top-3 left-3 px-2 py-1 bg-surface-container-lowest/60 backdrop-blur-md rounded-md">
+<span class="text-[10px] font-bold text-primary tracking-widest uppercase">Writing</span>
+</div>
+</div>
+<div class="p-4">
+<h3 class="text-sm font-semibold text-on-surface leading-tight mb-1">Ghostwriting for Tech Blogs</h3>
+<div class="flex items-center gap-1 mb-2">
+<span class="material-symbols-outlined text-[14px] text-yellow-500 fill-1" data-icon="star">star</span>
+<span class="text-[11px] font-bold text-on-surface">4.8</span>
+<span class="text-[11px] text-on-surface-variant">(86)</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1">
+<span class="text-xs text-on-surface-variant">@word_smith</span>
+<span class="material-symbols-outlined text-[14px] text-blue-400 fill-1" data-icon="verified">verified</span>
+</div>
+<span class="text-sm font-bold text-primary">$60</span>
+</div>
+</div>
+</div>
+<!-- Card 5 (Large - Trending) -->
+<div class="group relative bg-surface-container-low rounded-2xl overflow-hidden ghost-border transition-all duration-300 card-hover-glow">
+<div class="aspect-[3/4] relative">
+<img alt="video editing software" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuByvW0tukf4PJ5PpzHy-8i4hUkz-gQqeogC_-Qigks9gNisvC9BGPubL47GI1uzNs7605wR_w_TsuLUu_58driA_4H86ALzkvPnxRdJ18Ep-aEWvq_xqZfCelnioeAKjIo8bMTfHEcAFYq78WmqT28QXITw2zuQZRZeOOwtCI9dbqQuEzvuvlEbM9usmKrzPx0u4jME9dQSG9B1jaE-LVAzo4eMq90E-2DkmpInXSWqCiQGt-LV0TeoRFPvxiuktnOsnuh9nSsApL4"/>
+<div class="absolute top-3 left-3 flex flex-col gap-1.5">
+<span class="px-2 py-1 bg-surface-container-lowest/60 backdrop-blur-md rounded-md text-[10px] font-bold text-primary tracking-widest uppercase inline-block">Video</span>
+<span class="px-2 py-1 bg-blue-500/80 backdrop-blur-md rounded-md text-[9px] font-bold text-white tracking-widest uppercase flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px] fill-1" data-icon="trending_up">trending_up</span> TRENDING NOW
+                        </span>
+</div>
+</div>
+<div class="p-4 bg-gradient-to-t from-surface-container-low to-transparent">
+<h3 class="text-sm font-semibold text-on-surface leading-tight mb-1">Short-form Video Masterclass</h3>
+<div class="flex items-center gap-1 mb-2">
+<span class="material-symbols-outlined text-[14px] text-yellow-500 fill-1" data-icon="star">star</span>
+<span class="text-[11px] font-bold text-on-surface">4.9</span>
+<span class="text-[11px] text-on-surface-variant">(310)</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-xs text-on-surface-variant">@edit_pro</span>
+<span class="text-sm font-bold text-primary">$35</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Featured Creator -->
+<section class="mt-12 mb-20">
+<h2 class="text-xs font-bold text-on-surface-variant tracking-[0.2em] uppercase mb-6">Featured Creator</h2>
+<div class="bg-surface-container-high rounded-[2rem] p-6 ghost-border relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-[60px] rounded-full"></div>
+<div class="relative z-10 flex items-center gap-6">
+<div class="w-20 h-20 rounded-2xl overflow-hidden ring-2 ring-primary/20">
+<img alt="portrait" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgJom94n-i0iuHkhO7y25Atf2I6SdL5XFqeXDv9mFHc_e9TiK1tvDvQdbKGtZzQxoECAcZy45W5F86fmYX9EnVdFeCwQt7AgJapPmg1anR8F6GIsbQBfgbKC48oFBWEIEW05PH-Ma0GpyXwFHm3JgklHvWzbbX8yL5CYhaB_cuAfikHjql3K7iZ41jtVT3Xng6xRyVMYcl4WIT6T522mrCkef-dSZ6uJfqL6mIxy0zUFiF5x2aXClXp_D3P0Ssaw8yHLzWdAi8KlU"/>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-1.5 mb-0.5">
+<h4 class="text-lg font-bold text-on-surface tracking-tight">Marcus Thorne</h4>
+<span class="material-symbols-outlined text-[18px] text-blue-400 fill-1" data-icon="verified">verified</span>
+</div>
+<p class="text-xs text-on-surface-variant mb-3">Senior Brand Designer &amp; Illustrator</p>
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-surface-container-lowest text-[10px] text-primary-dim rounded-md">1.2k Gigs</span>
+<span class="px-2 py-1 bg-surface-container-lowest text-[10px] text-primary-dim rounded-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px] fill-1" data-icon="star">star</span> 4.9
+                        </span>
+</div>
+</div>
+<button class="w-12 h-12 rounded-full gradient-btn flex items-center justify-center shadow-lg shadow-primary/20 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-on-primary" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Floating AI Assistant -->
+<button class="fixed bottom-28 right-6 w-14 h-14 rounded-full bg-zinc-800 border border-white/20 text-primary flex items-center justify-center z-[60] ai-glow active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-2xl" data-icon="smart_toy" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-lg rounded-[2rem] border border-white/10 bg-zinc-800/60 backdrop-blur-xl flex justify-around items-center h-20 px-4 shadow-[0_12px_32px_rgba(173,198,255,0.08)] z-50">
+<a class="flex flex-col items-center justify-center text-zinc-400 opacity-60 hover:text-blue-200 transition-colors active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="font-inter text-[10px] uppercase tracking-[0.05em] font-bold">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-blue-300 relative scale-110 active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="search" style="font-variation-settings: 'FILL' 1;">search</span>
+<span class="font-inter text-[10px] uppercase tracking-[0.05em] font-bold">Explore</span>
+<div class="absolute -bottom-1 w-1 h-1 bg-blue-300 rounded-full blur-[2px]"></div>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-400 opacity-60 hover:text-blue-200 transition-colors active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined text-3xl mb-1" data-icon="add_circle">add_circle</span>
+<span class="font-inter text-[10px] uppercase tracking-[0.05em] font-bold">Upload</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-400 opacity-60 hover:text-blue-200 transition-colors active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="chat_bubble">chat_bubble</span>
+<span class="font-inter text-[10px] uppercase tracking-[0.05em] font-bold">Messages</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-400 opacity-60 hover:text-blue-200 transition-colors active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="person">person</span>
+<span class="font-inter text-[10px] uppercase tracking-[0.05em] font-bold">Profile</span>
+</a>
+</nav>
+</body></html>

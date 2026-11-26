@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SkillTok Messaging</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#dae6fe",
+                    "outline": "#767575",
+                    "on-secondary-fixed-variant": "#4d5d73",
+                    "primary-fixed": "#d8e2ff",
+                    "surface-variant": "#252626",
+                    "tertiary": "#f0f3ff",
+                    "on-tertiary-fixed-variant": "#535e72",
+                    "on-error-container": "#ff9993",
+                    "on-secondary-container": "#b0c0da",
+                    "outline-variant": "#484848",
+                    "on-tertiary-container": "#495468",
+                    "tertiary-dim": "#ccd7ef",
+                    "surface-container-high": "#1f2020",
+                    "on-primary-fixed-variant": "#0057bd",
+                    "surface-container-lowest": "#000000",
+                    "secondary": "#8f9fb7",
+                    "on-surface": "#e7e5e5",
+                    "primary-container": "#004395",
+                    "primary-dim": "#98b8ff",
+                    "primary-fixed-dim": "#c3d4ff",
+                    "error-container": "#7f2927",
+                    "inverse-primary": "#005bc4",
+                    "surface-container": "#191a1a",
+                    "on-primary-fixed": "#003c86",
+                    "on-secondary": "#102134",
+                    "surface-container-highest": "#252626",
+                    "on-tertiary-fixed": "#374155",
+                    "on-background": "#e7e5e5",
+                    "on-primary": "#003d88",
+                    "surface-container-low": "#131313",
+                    "inverse-on-surface": "#565555",
+                    "error": "#ee7d77",
+                    "secondary-dim": "#8f9fb7",
+                    "secondary-fixed-dim": "#c5d6f0",
+                    "background": "#0e0e0e",
+                    "surface-bright": "#2b2c2c",
+                    "on-secondary-fixed": "#314055",
+                    "secondary-container": "#2d3c51",
+                    "primary": "#adc6ff",
+                    "tertiary-fixed-dim": "#ccd7ef",
+                    "secondary-fixed": "#d3e4fe",
+                    "on-surface-variant": "#acabaa",
+                    "on-primary-container": "#bdd0ff",
+                    "on-tertiary": "#515c70",
+                    "error-dim": "#bb5551",
+                    "tertiary-container": "#dae6fe",
+                    "surface-tint": "#adc6ff",
+                    "inverse-surface": "#fcf9f8",
+                    "surface-dim": "#0e0e0e",
+                    "surface": "#0e0e0e",
+                    "on-error": "#490106"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(25, 26, 26, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        .glass-bubble-receiver {
+            background: rgba(45, 60, 81, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .glass-bubble-sender {
+            background: rgba(0, 67, 149, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(173, 198, 255, 0.2);
+        }
+        .ghost-border {
+            border: 1px solid rgba(72, 72, 72, 0.15);
+        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #252626; border-radius: 10px; }
+        .ai-glow {
+            box-shadow: 0 0 20px rgba(173, 198, 255, 0.3);
+        }
+        @keyframes subtle-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        .animate-subtle-float {
+            animation: subtle-float 3s ease-in-out infinite;
+        }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body min-h-screen overflow-hidden flex flex-col">
+<!-- AI Assistant Floating Button -->
+<button class="fixed bottom-28 right-6 z-[60] w-14 h-14 rounded-full bg-gradient-to-tr from-primary to-primary-container flex items-center justify-center text-on-primary shadow-lg ai-glow animate-subtle-float hover:scale-110 transition-transform md:bottom-10">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</button>
+<header class="fixed top-0 w-full z-50 bg-zinc-900/70 backdrop-blur-lg flex items-center justify-between px-6 h-16">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-white/10">
+<img alt="Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAW_9Yh_FuWAb5uz5bg6st5jNz2axo7aMpTYVJ8EeWSpKKRezWIEjuNJ5cBzM8v_7qXzz5ZtFZrde267wUX_h2RieXt5htd7FZIIYuY0RS75oEiSS-KRkyEielXM9ex-ABoc1a1ILDizsUXPKLPlc2X6_BHqwgr368loGTl-01hflbzWzpi2kT7sPVsK77IkwXykUyPlZE0cTTeDt77OBZKSVhhRmSmh3v-nM4MRzmAD_3YyqiQ4McvugZ1L-6PHGJKS2yX16Tp2Xc"/>
+</div>
+<h1 class="font-inter text-lg font-semibold tracking-tight text-zinc-100">QuickGig</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-zinc-500 hover:opacity-80 transition-opacity cursor-pointer">notifications</span>
+</div>
+</header>
+<main class="flex-1 pt-16 pb-28 md:pb-0 flex flex-col md:flex-row h-screen">
+<aside class="w-full md:w-96 flex-shrink-0 bg-surface border-r border-outline-variant/10 overflow-y-auto flex flex-col">
+<div class="p-6">
+<h2 class="text-2xl font-bold tracking-tight mb-6 mt-2">Messages</h2>
+<div class="space-y-1">
+<!-- Conversation Item Active -->
+<div class="flex items-center gap-4 p-4 rounded-xl bg-surface-container-high transition-all cursor-pointer group">
+<div class="relative">
+<img alt="Sarah" class="w-12 h-12 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDERJlnXF-qjmvJpKHt4AkrMNhPsN9MDYDyW5RjGPhrA5K_5d3f7MCQGNRuSDynLLYFRcTSf1kKeRiyvPTCKljj7pF4v8Ubt21jODyzgsLoxRKkIvNqdBqB53VDghz5ZnMBuFDq1cmfyHyFn7S4T8AT-6sVOKwKyjGxXf3frJD_ICQuRglPCbinCl5gFPTIMP13-NUPObMhrK9zbFJAMoG3V4v8yulifm7zQWoEAq6NmqfrbDcCr7u0-p58vhrTBYS_7MqvXzFIPYA"/>
+<div class="absolute -bottom-1 -right-1 flex items-center justify-center w-5 h-5 bg-primary rounded-full border-2 border-surface-container-high">
+<span class="material-symbols-outlined text-[12px] text-on-primary font-bold" style="font-variation-settings: 'wght' 700;">verified</span>
+</div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-0.5">
+<span class="font-semibold text-on-surface truncate">Sarah Jenkins</span>
+<span class="text-[10px] uppercase tracking-wider text-on-surface-variant font-bold">2m ago</span>
+</div>
+<p class="text-sm text-primary truncate font-medium">The gig details look great!</p>
+</div>
+</div>
+<!-- Conversation Item -->
+<div class="flex items-center gap-4 p-4 rounded-xl hover:bg-surface-container-low transition-all cursor-pointer group opacity-70 hover:opacity-100">
+<div class="relative">
+<img alt="Marcus" class="w-12 h-12 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOIMXJp0qz-T1zUNJXIuX6cdsaojqivuzownnoOvdhGHgFdOhbTUfQEtdrcCkGOigFjFowxMVEjTJI3ScAcg9pAwrIo9SlMkq3MZk4yXPomxsUnPeXiTkLl8V1kF4odW_IwDHR4XdFANcW3HL-ryn4gDM-67W07221134HkLJxVluY0KH65vP1CDWWji6U3GQJwUxpqdYWA-WAc3n2DNzicnAs6HHgoFmji82dRaI3Dq26PhbsMtqMeZ0AKnQBJ4T2PDvruiTd4e4"/>
+<div class="absolute -bottom-1 -right-1 flex items-center justify-center w-5 h-5 bg-primary rounded-full border-2 border-surface">
+<span class="material-symbols-outlined text-[12px] text-on-primary font-bold" style="font-variation-settings: 'wght' 700;">verified</span>
+</div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-0.5">
+<span class="font-semibold text-on-surface truncate">Marcus Chen</span>
+<span class="text-[10px] uppercase tracking-wider text-on-surface-variant font-bold">1h ago</span>
+</div>
+<p class="text-sm text-on-surface-variant truncate">I'll send the files by EOD tomorrow.</p>
+</div>
+</div>
+<!-- Conversation Item -->
+<div class="flex items-center gap-4 p-4 rounded-xl hover:bg-surface-container-low transition-all cursor-pointer group opacity-70 hover:opacity-100">
+<img alt="Alex" class="w-12 h-12 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMLB_utMHBJjK5X-rT13FBAIaFfP2g-8MDg3zn2W3Pu04k8UVETZbEYK0q0GwA8UZnCrpEy5lWR9rO7RMO2rXx1yt87X-DdPMdkbb5XP8QD759vHcpiiBxNH3boDuezuIkpFHTr2sFQK5q3hcnPxcSSk2g4fKY3F97OdXXU8r5KJA6zULQ5bK3IzP0SxqlQjZRnxV4xegIw3NeVi0ianKeDVwcSmrOIOC-Y5nM-z3siZqV5GrYx8P2iM-AIaYIFZn81sQLK4O-PPg"/>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-0.5">
+<span class="font-semibold text-on-surface truncate">Alex Rivera</span>
+<span class="text-[10px] uppercase tracking-wider text-on-surface-variant font-bold">Yesterday</span>
+</div>
+<p class="text-sm text-on-surface-variant truncate">How much for the logo animation?</p>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<section class="flex-1 flex flex-col bg-surface-container-low relative overflow-hidden">
+<!-- Chat Header -->
+<div class="h-20 px-8 flex items-center justify-between border-b border-outline-variant/5 glass-panel z-10 shrink-0">
+<div class="flex items-center gap-4">
+<div class="relative">
+<img alt="Sarah" class="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDERJlnXF-qjmvJpKHt4AkrMNhPsN9MDYDyW5RjGPhrA5K_5d3f7MCQGNRuSDynLLYFRcTSf1kKeRiyvPTCKljj7pF4v8Ubt21jODyzgsLoxRKkIvNqdBqB53VDghz5ZnMBuFDq1cmfyHyFn7S4T8AT-6sVOKwKyjGxXf3frJD_ICQuRglPCbinCl5gFPTIMP13-NUPObMhrK9zbFJAMoG3V4v8yulifm7zQWoEAq6NmqfrbDcCr7u0-p58vhrTBYS_7MqvXzFIPYA"/>
+<div class="absolute -bottom-1 -right-1 flex items-center justify-center w-4 h-4 bg-primary rounded-full border border-surface-container-low">
+<span class="material-symbols-outlined text-[10px] text-on-primary font-bold" style="font-variation-settings: 'wght' 700;">verified</span>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="text-lg font-bold tracking-tight text-on-surface">Sarah Jenkins</span>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-[10px] uppercase tracking-[0.08em] font-bold text-on-surface-variant">Typing...</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-5 text-secondary">
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">call</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">videocam</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">info</span>
+</div>
+</div>
+<!-- Messages Area -->
+<div class="flex-1 overflow-y-auto p-8 space-y-8 flex flex-col scroll-smooth">
+<div class="flex justify-center">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-extrabold bg-surface-container p-2 rounded-lg">Today, Oct 24</span>
+</div>
+<!-- Receiver Message -->
+<div class="flex gap-4 max-w-[85%] self-start group">
+<img alt="Sarah" class="w-8 h-8 rounded-full self-end mb-1" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsGr-dnfFhEkfjrJ4pr_X61hdaEnU44fn1fn5dg_bhGS-i1E4QXwsug6u-JLTcZ97obO5xariCyTz2dU1MGXkj7x_O408wnfZYXcR7nQLL8jDay4q_RD8sljVnlMpZ1nATOovAKuF4gwUyVMiBCFZL2YnLeqGfGwHYuxno1uVvDU9ar9LS-3Qgr1tLUqrH1Bo1sWZ8jwNYVSF7o9iKJ1RG30lfkA4gj1Gu3WClcmaTwK0wTmQOp2hKWTQsU0Pn4qMqzNqOwiBk8pY"/>
+<div class="flex flex-col gap-1.5">
+<div class="glass-bubble-receiver text-on-surface px-5 py-3.5 rounded-2xl rounded-bl-none text-[0.95rem] leading-relaxed shadow-sm">
+                            Hey! I saw your portfolio on SkillTok. Your UI motion work is incredible.
+                        </div>
+<span class="text-[10px] text-on-surface-variant ml-1 font-medium">10:42 AM</span>
+</div>
+</div>
+<!-- Sender Message -->
+<div class="flex gap-4 max-w-[85%] self-end">
+<div class="flex flex-col gap-1.5 items-end">
+<div class="glass-bubble-sender text-on-primary px-5 py-3.5 rounded-2xl rounded-br-none shadow-lg text-[0.95rem] leading-relaxed font-medium">
+                            Thanks Sarah! Appreciate that. Are you looking for something specific for your project?
+                        </div>
+<span class="text-[10px] text-on-surface-variant mr-1 font-medium flex items-center gap-1">
+                            10:45 AM <span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">done_all</span>
+</span>
+</div>
+</div>
+<!-- AI Suggestion Widget -->
+<div class="mx-auto w-full max-w-2xl">
+<div class="bg-surface-container/40 backdrop-blur-md rounded-2xl border border-primary/20 p-4 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-2 opacity-20">
+<span class="material-symbols-outlined text-4xl text-primary">auto_awesome</span>
+</div>
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="text-[10px] font-bold uppercase tracking-wider text-primary">AI Assistant</span>
+</div>
+<p class="text-xs text-on-surface-variant mb-4">Sarah is looking for a splash intro. Here are some quick reply drafts:</p>
+<div class="flex flex-wrap gap-2">
+<button class="px-3 py-2 rounded-full bg-surface-container-high border border-outline-variant/30 text-[11px] hover:border-primary/50 transition-colors">"I'd love to help! Can you share the brief?"</button>
+<button class="px-3 py-2 rounded-full bg-surface-container-high border border-outline-variant/30 text-[11px] hover:border-primary/50 transition-colors">"What's your timeline for the launch?"</button>
+<button class="px-3 py-2 rounded-full bg-surface-container-high border border-outline-variant/30 text-[11px] hover:border-primary/50 transition-colors">"I can definitely handle fintech animations."</button>
+</div>
+</div>
+</div>
+<!-- Receiver Message -->
+<div class="flex gap-4 max-w-[85%] self-start group">
+<div class="w-8 h-8"></div>
+<div class="flex flex-col gap-1.5">
+<div class="glass-bubble-receiver text-on-surface px-5 py-3.5 rounded-2xl rounded-bl-none text-[0.95rem] leading-relaxed">
+                            Yes, I need a 3-second splash intro for a fintech app I'm launching. 
+                        </div>
+</div>
+</div>
+<div class="flex gap-4 max-w-[85%] self-start group">
+<img alt="Sarah" class="w-8 h-8 rounded-full self-end mb-1" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_KJYQpWbr4HYbTVGPmObSS8tru5i1A9cxyIDMVXjs2MUd8vpAmCJaIQQgiTTdaxwy2YJw1yqfAkCHuzdIzY3BlCh7kvJHZqKUNlNG1InBQPe6-3OQ9oUgOljabZYHv6sNX1Bh0nUzoLMlk43WfMfuw8maaj0KzcKwac7wOHMVoyCXPYe8741vepY2inPPtH5583fgGtTdc85eQOB7GjVnstRDEl3dnxp9bUF4nA-kv5gbNryIhOdsd8RRqHjGoWG4jqqYvfviLLo"/>
+<div class="flex flex-col gap-1.5">
+<div class="glass-bubble-receiver text-on-surface px-5 py-3.5 rounded-2xl rounded-bl-none text-[0.95rem] leading-relaxed">
+                            The gig details look great! I've attached the brand guidelines.
+                        </div>
+<div class="bg-surface-container-highest/30 backdrop-blur-sm p-3 rounded-xl flex items-center gap-3 border border-outline-variant/20 cursor-pointer hover:bg-surface-container-highest/50 transition-colors">
+<div class="w-10 h-10 rounded-lg bg-primary-container/30 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">description</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs font-bold">Brand_v2.pdf</span>
+<span class="text-[10px] text-on-surface-variant uppercase">4.2 MB</span>
+</div>
+</div>
+<span class="text-[10px] text-on-surface-variant ml-1 font-medium">10:48 AM</span>
+</div>
+</div>
+</div>
+<!-- Input Bar -->
+<div class="p-6 pb-10 bg-transparent shrink-0">
+<div class="max-w-4xl mx-auto relative flex items-center gap-3">
+<div class="flex-1 flex items-center bg-surface-container-highest/40 backdrop-blur-xl rounded-full px-6 py-1 ghost-border shadow-2xl">
+<input class="flex-1 bg-transparent border-none focus:ring-0 text-on-surface placeholder:text-on-surface-variant/50 h-12" placeholder="Message Sarah..." type="text"/>
+<div class="flex items-center gap-4 text-on-surface-variant">
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">attach_file</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">photo_camera</span>
+</div>
+</div>
+<button class="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary-container flex items-center justify-center text-on-primary shadow-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Navigation Shell -->
+<nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-lg rounded-[2rem] border border-white/10 bg-zinc-800/60 backdrop-blur-xl flex justify-around items-center h-20 px-4 shadow-[0_12px_32px_rgba(173,198,255,0.08)] z-50">
+<a class="flex flex-col items-center justify-center text-zinc-400 opacity-60 hover:text-blue-200 transition-colors active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-inter text-[10px] uppercase tracking-[0.05em] font-bold">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-400 opacity-60 hover:text-blue-200 transition-colors active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined">search</span>
+<span class="font-inter text-[10px] uppercase tracking-[0.05em] font-bold">Explore</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-400 opacity-60 hover:text-blue-200 transition-colors active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined text-3xl">add_circle</span>
+<span class="font-inter text-[10px] uppercase tracking-[0.05em] font-bold">Upload</span>
+</a>
+<a class="flex flex-col items-center justify-center text-blue-300 relative scale-110 active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chat_bubble</span>
+<span class="font-inter text-[10px] uppercase tracking-[0.05em] font-bold">Messages</span>
+<div class="absolute -top-1 -right-1 w-2 h-2 bg-error rounded-full"></div>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-400 opacity-60 hover:text-blue-200 transition-colors active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-inter text-[10px] uppercase tracking-[0.05em] font-bold">Profile</span>
+</a>
+</nav>
+</body></html>
