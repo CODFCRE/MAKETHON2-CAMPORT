@@ -1,0 +1,32 @@
+services:
+  api:
+    build:
+      context: ./server
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      SUPABASE_URL: ${SUPABASE_URL:?Set SUPABASE_URL in .env}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?Set SUPABASE_SERVICE_ROLE_KEY in .env}
+      SIGHTENGINE_API_USER: ${SIGHTENGINE_API_USER:-}
+      SIGHTENGINE_API_SECRET: ${SIGHTENGINE_API_SECRET:-}
+    expose:
+      - "3001"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3001/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  web:
+    build:
+      context: .
+      args:
+        VITE_GOOGLE_MAPS_API_KEY: ${VITE_GOOGLE_MAPS_API_KEY:-}
+        VITE_SUPABASE_URL: ${VITE_SUPABASE_URL:-}
+        VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY:-}
+    ports:
+      - "${CAMPORT_PORT:-8080}:80"
+    depends_on:
+      api:
+        condition: service_healthy

@@ -71,3 +71,23 @@ export default defineConfig([
   },
 ])
 ```
+
+## Run with Docker
+
+1. Copy `.env.example` to `.env` and set `SUPABASE_URL` and
+   `SUPABASE_SERVICE_ROLE_KEY`. Set `SIGHTENGINE_API_USER` and
+   `SIGHTENGINE_API_SECRET` to enable media moderation.
+2. Set any frontend values you use (`VITE_SUPABASE_URL`,
+   `VITE_SUPABASE_ANON_KEY`, and `VITE_GOOGLE_MAPS_API_KEY`) in `.env`.
+   These are embedded in the frontend at build time, so rebuild the web image
+   after changing them.
+3. Build and start both containers:
+
+   ```sh
+   docker compose up --build
+   ```
+
+The app is available at http://localhost:8080. Docker Compose proxies `/api`
+and `/health` requests to the Express API. Stop the containers with
+`docker compose down`. If port 8080 is already in use, set `CAMPORT_PORT` in
+`.env` to a free port before starting the stack.
